@@ -1,0 +1,52 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">WebApplication9</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="()=>expandSubNav = false">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="mylib" @onclick="()=>expandSubNav = false">
+                <span class="oi oi-book" aria-hidden="true"></span> My library
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="books" @onclick="()=>expandSubNav = true" >
+                <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Books Catalog
+            </NavLink>
+            @if (expandSubNav)
+            {
+                <NavLink class="nav-link" href="authors">
+                    <span class="oi oi-bookmark" aria-hidden="true"></span> Filter by authors
+                </NavLink>
+                <NavLink class="nav-link" href="genres">
+                    <span class="oi oi-bookmark" aria-hidden="true"></span> Filter by genres
+                </NavLink>
+            }
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="settings" @onclick="()=>expandSubNav = false">
+                <span class="oi oi-cog" aria-hidden="true"></span> Settings
+            </NavLink>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool expandSubNav;
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

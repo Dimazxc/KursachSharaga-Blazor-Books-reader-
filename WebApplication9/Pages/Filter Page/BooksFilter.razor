@@ -1,0 +1,24 @@
+﻿@page "/books"
+
+@using WebApplication9.Data
+
+
+<h1 class="h1">Books</h1>
+<div class="image main">
+    <img src="https://demo.phpjabbers.com/free-web-templates/book-online-store-website-template-86/images/banner-image-6-1920x500.jpg" class="img-fluid" alt="">
+</div>
+<br>
+
+<div class="container">
+    <MudTextField Style="font-size:25px" OnKeyDown="@SearchBook" @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="MudBlazor.Color.Secondary" />
+</div>
+
+@code {
+
+    public string Search { get; set; }
+    private void SearchBook()
+    {
+
+    }
+
+}
