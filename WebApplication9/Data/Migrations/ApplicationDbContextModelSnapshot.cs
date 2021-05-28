@@ -21,11 +21,11 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.Property<int>("AuthorsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AuthorsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BooksId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BooksId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AuthorsId", "BooksId");
 
@@ -36,11 +36,11 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("BookGenre", b =>
                 {
-                    b.Property<int>("BooksId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BooksId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GenresId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GenresId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("BooksId", "GenresId");
 
@@ -251,20 +251,23 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("WebApplication9.Data.Models.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmallDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -275,10 +278,9 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("WebApplication9.Data.Models.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -312,8 +314,8 @@ namespace WebApplication9.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -336,8 +338,8 @@ namespace WebApplication9.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -380,10 +382,9 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("WebApplication9.Data.Models.Genre", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()

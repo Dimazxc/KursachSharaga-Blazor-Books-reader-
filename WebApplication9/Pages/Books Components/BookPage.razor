@@ -1,0 +1,18 @@
+﻿@page "/books/{Id:guid}"
+
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Data.Models;
+
+@inject IAuthorRepository AuthorRepo;
+@inject NavigationManager NavigationManager;
+
+<h2>Book page by id: @Id</h2>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+
+
+
+}

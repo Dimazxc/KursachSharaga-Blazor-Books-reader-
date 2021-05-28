@@ -1,11 +1,18 @@
-﻿
+﻿@using WebApplication9.Data.Models;
+
 <div class="col-md-4 mb-5">
     <div class="card h-100 product">
-        <div class="imgbox"> <img src=""> </div>
+        <div class="imgbox"> <img src="@Book.ImageUrl"> </div>
         <div class="specifies">
-            <h2> <br><MudRating ReadOnly="true" SelectedValue="3" /> <span></span><br><span></span></h2>
+            <h2>
+                @Book.Title<br><MudRating ReadOnly="true" SelectedValue="3" /><span>(@Book.Ratings.Count() voters.)</span>
+                <br>
+                <span></span>
+                <br>
+                <span></span>
+            </h2>
             <br>
-            <h4></h4>
+            <h4>@Book.SmallDescription</h4>
             <div class="text-center">
                 <MudFab Color="MudBlazor.Color.Tertiary" Icon="@Icons.Material.Filled.QuestionAnswer" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read more" Class="ma-2" />
                 <MudFab Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Add" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="To wishlist" Class="ma-2" />
@@ -17,11 +24,5 @@
 
 @code {
     [Parameter]
-    public string Title { get; set; }
-
-    [Parameter]
-    public string Content { get; set; }
-
-    [Parameter]
-    public string ImageUrl { get; set; }
+    public Book Book { get; set; }
 }

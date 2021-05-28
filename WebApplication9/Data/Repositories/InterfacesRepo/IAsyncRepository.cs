@@ -8,7 +8,7 @@ namespace WebApplication9.Data.Repositories
 {
     interface IAsyncRepository<T> where T : class
     {
-        ValueTask<T> GetById(int id);
+        ValueTask<T> GetById(object id);
         Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);
 
         Task Add(T entity);

@@ -1,0 +1,27 @@
+﻿@page "/genres/{Id:guid}"
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Data.Models;
+
+@inject IGenreRepository GenreRepo;
+@inject NavigationManager NavigationManager;
+
+<h2>Genres page by id: @genre.Name</h2>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private Genre genre;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetGenre();
+    }
+
+    private async Task GetGenre()
+    {
+        genre = await GenreRepo.GetById(Id);
+
+        if (genre == null) NavigationManager.NavigateTo("notfound");
+    }
+}

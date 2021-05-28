@@ -1,0 +1,18 @@
+﻿@using WebApplication9.Data.Models;
+
+<article class="@style">
+    <span class="image">
+        <img class="tileimg" src="@Author.ImageUrl" alt="">
+    </span>
+    <a href="#" class="text-left">
+        <h2>@Author.FullName</h2>
+        <h5 class="authortheme">@Author.SmallDescription</h5>
+    </a>
+</article>
+
+@code {
+    [Parameter]
+    public Author Author { get; set; }
+
+    private string style = "style" + new Random().Next(1, 7);
+}

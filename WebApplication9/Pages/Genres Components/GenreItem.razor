@@ -1,0 +1,17 @@
+﻿@using WebApplication9.Data.Models;
+
+<article class="@style">
+    <span class="image">
+        <img class="tileimg" src="@Genre.ImageUrl" alt="">
+    </span>
+    <a href="#" class="text-left">
+        <h2>@Genre.Name</h2>
+    </a>
+</article>
+
+@code {
+    [Parameter]
+    public Genre Genre { get; set; }
+
+    private string style = "style" + new Random().Next(1, 7);
+}

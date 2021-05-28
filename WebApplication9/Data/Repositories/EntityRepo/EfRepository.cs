@@ -15,7 +15,7 @@ namespace WebApplication9.Data.Repositories
             Context = context;
         }
 
-        public ValueTask<T> GetById(int id) => Context.Set<T>().FindAsync(id);
+        public ValueTask<T> GetById(object id) => Context.Set<T>().FindAsync(id);
 
         public Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate) 
             => Context.Set<T>().FirstOrDefaultAsync(predicate);

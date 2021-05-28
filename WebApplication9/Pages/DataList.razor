@@ -1,0 +1,21 @@
+﻿@using WebApplication9.Data.Models;
+
+<div class="container" style="font-family:'Times New Roman', Times, serif">
+    <div class="row">
+        <h2 class="h2">@HeaderMessage</h2>
+        @MainContent
+    </div>
+    <br>
+    <div class="text-center"><MudLink Style="font-size:16px" Color="MudBlazor.Color.Secondary" Href="@HrefMessage">MORE @HrefMessage.ToUpper() &nbsp;<i class="oi oi-arrow-right"></i></MudLink></div>
+</div>
+
+@code {
+    [Parameter] 
+    public RenderFragment MainContent { get; set; }
+
+    [Parameter]
+    public string HeaderMessage { get; set; }
+
+    [Parameter]
+    public string HrefMessage { get; set; }
+}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,13 +9,16 @@ namespace WebApplication9.Data.Models
     public class Author
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string FullName { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string MainDescription { get; set; }
+
+        [Required]
+        public string SmallDescription { get; set; }
 
         [Required]
         public string ImageUrl { get; set; }

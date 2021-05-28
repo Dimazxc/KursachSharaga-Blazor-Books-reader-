@@ -1,0 +1,30 @@
+﻿@page "/authors/{Id:guid}"
+
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Data.Models;
+
+@inject IAuthorRepository AuthorRepo;
+@inject NavigationManager NavigationManager;
+
+
+
+<h2>Authors page by id: @Id</h2>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private Author author;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetAuthor();
+    }
+
+    private async Task GetAuthor()
+    {
+        author = await AuthorRepo.GetById(Id);
+
+        if (author == null) NavigationManager.NavigateTo("notfound");
+    }
+}

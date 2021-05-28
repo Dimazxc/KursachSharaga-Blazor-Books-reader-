@@ -10,8 +10,8 @@ using WebApplication9.Data;
 namespace WebApplication9.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210524141008_Add table comment, rating")]
-    partial class Addtablecommentrating
+    [Migration("20210527190856_Change identificator type to GUID")]
+    partial class ChangeidentificatortypetoGUID
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,11 +23,11 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.Property<int>("AuthorsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AuthorsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BooksId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BooksId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AuthorsId", "BooksId");
 
@@ -38,11 +38,11 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("BookGenre", b =>
                 {
-                    b.Property<int>("BooksId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BooksId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GenresId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GenresId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("BooksId", "GenresId");
 
@@ -253,20 +253,23 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("WebApplication9.Data.Models.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmallDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -277,20 +280,23 @@ namespace WebApplication9.Data.Migrations
 
             modelBuilder.Entity("WebApplication9.Data.Models.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MainDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PdfUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmallDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -310,8 +316,8 @@ namespace WebApplication9.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -327,12 +333,68 @@ namespace WebApplication9.Data.Migrations
                     b.ToTable("BookRating");
                 });
 
-            modelBuilder.Entity("WebApplication9.Data.Models.Genre", b =>
+            modelBuilder.Entity("WebApplication9.Data.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid?>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("WebApplication9.Data.Models.CommentRating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("CommentRating");
+                });
+
+            modelBuilder.Entity("WebApplication9.Data.Models.Genre", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -433,9 +495,32 @@ namespace WebApplication9.Data.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("WebApplication9.Data.Models.Comment", b =>
+                {
+                    b.HasOne("WebApplication9.Data.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId");
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("WebApplication9.Data.Models.CommentRating", b =>
+                {
+                    b.HasOne("WebApplication9.Data.Models.Comment", "Comment")
+                        .WithMany("CommentRatings")
+                        .HasForeignKey("CommentId");
+
+                    b.Navigation("Comment");
+                });
+
             modelBuilder.Entity("WebApplication9.Data.Models.Book", b =>
                 {
                     b.Navigation("Ratings");
+                });
+
+            modelBuilder.Entity("WebApplication9.Data.Models.Comment", b =>
+                {
+                    b.Navigation("CommentRatings");
                 });
 #pragma warning restore 612, 618
         }
