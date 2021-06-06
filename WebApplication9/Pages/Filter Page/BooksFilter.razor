@@ -1,24 +1,38 @@
 ﻿@page "/books"
 
-@using WebApplication9.Data
+@using WebApplication9.Data.Models;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Pages.Books_Components;
+@inject IBookRepository BookRepo;
 
+@attribute [Authorize]
 
 <h1 class="h1">Books</h1>
 <div class="image main">
-    <img src="https://demo.phpjabbers.com/free-web-templates/book-online-store-website-template-86/images/banner-image-6-1920x500.jpg" class="img-fluid" alt="">
+    <img src="https://demo.phpjabbers.com/free-web-templates/book-online-store-website-template-86/images/banner-image-6-1920x500.jpg" class="imageHeader" alt="">
 </div>
 <br>
 
-<div class="container">
-    <MudTextField Style="font-size:25px" OnKeyDown="@SearchBook" @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="MudBlazor.Color.Secondary" />
-</div>
+<FilterGenericItems Items="@findedbooks" TItem="Book" SearchItems="@GetBookBySearchValue">
+    <Item Context="book">
+        <BookItem Book="book" />
+    </Item>
+</FilterGenericItems>
 
 @code {
-
-    public string Search { get; set; }
-    private void SearchBook()
+    private IEnumerable<Book> books = new List<Book>();
+    private IEnumerable<Book> findedbooks = new List<Book>();
+    protected async override Task OnInitializedAsync()
     {
-
+        books = await BookRepo.GetAll();
+        findedbooks = await BookRepo.GetAll();
     }
 
+    private IEnumerable<Book> GetBookBySearchValue(string searchValue)
+    {
+        if (string.IsNullOrEmpty(searchValue)) return books;
+        return books.Where(i => i.Title.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+        || i.MainDescription.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+        || i.SmallDescription.Contains(searchValue, StringComparison.OrdinalIgnoreCase));
+    }
 }

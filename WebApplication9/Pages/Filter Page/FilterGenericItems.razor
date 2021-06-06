@@ -1,0 +1,31 @@
+﻿@typeparam TItem
+
+<div class="container">
+    <MudTextField T="string" Style="font-size:25px" ValueChanged="@((e) => HandleSearchValueChanged(e))" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="MudBlazor.Color.Secondary" />
+    <h5 class="mb-4 mt-4">@Items.Count() matching results </h5>
+    <MudDivider />
+</div>
+<br>
+<br>
+<DataList>
+    <MainContent>
+        <GenericList ListOfItems="Items">
+            <ItemTemplate Context="item">
+                @if (Item != null)@Item(item)
+            </ItemTemplate>
+        </GenericList>
+    </MainContent>
+</DataList>
+
+
+@code {
+    [Parameter] public IEnumerable<TItem> Items { get; set; }
+    [Parameter] public RenderFragment<TItem> Item { get; set; }
+    [Parameter] public Func<string, IEnumerable<TItem>> SearchItems { get; set; }
+
+    private void HandleSearchValueChanged(string searchValue)
+    {
+        Items = SearchItems(searchValue);
+        StateHasChanged();
+    }
+}

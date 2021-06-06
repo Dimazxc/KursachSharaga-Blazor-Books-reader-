@@ -5,7 +5,11 @@
 @inject IGenreRepository GenreRepo;
 @inject NavigationManager NavigationManager;
 
-<h2>Genres page by id: @genre.Name</h2>
+@if (genre != null)
+{
+    <h2>Genres page by id: @genre.Name</h2>
+
+}
 
 @code {
     [Parameter]

@@ -1,18 +1,145 @@
 ﻿@page "/books/{Id:guid}"
 
+@using WebApplication9.Pages.Books_Components.BookPageComponents;
+@using WebApplication9.Pages.Helper_Components;
 @using WebApplication9.Data.Repositories.InterfacesRepo;
 @using WebApplication9.Data.Models;
 
-@inject IAuthorRepository AuthorRepo;
-@inject NavigationManager NavigationManager;
+@attribute [Authorize]
 
-<h2>Book page by id: @Id</h2>
+@inject IBookRepository BookRepo;
+@inject NavigationManager NavigationManager;
+@inject PageHrefService Pager;
+
+@if (book != null)
+{
+    <div class="content bg-author" style="background-image: url(@book.BackgroundImage);">
+        <div class="container mt-5">
+            <div class="row">
+                <BookImage ImageUrl="@book.ImageUrl" />
+                <div class="col-sm-8 bg-white sp-col">
+                    <div class="container">
+                        <div class="row" style="font-family: 'Poppins', sans-serif;">
+                            <div class="col-sm-12 text-center">
+                                <h2 class="h1">@book.Title</h2>
+                            </div>
+                            <div class="col-sm-12 mt-lg-5">
+                                <h2 class="h3">
+                                    <b>Author(s):</b>
+                                    <span>
+                                        <GenericList ListOfItems="book.Authors">
+                                            <ItemTemplate Context="author">
+                                                <MudLink Underline="Underline.None" Style="font-size:25px" Href="@Pager.GetHref("/authors/", author.Id)" Color="MudBlazor.Color.Secondary">@author.FullName &nbsp;</MudLink>
+                                            </ItemTemplate>
+                                        </GenericList>
+                                    </span>
+                                </h2>
+                            </div>
+                            <div class="col-sm-12 mt-lg-5">
+                                <h2 class="h3">
+                                    <b>Genre(s):</b>
+                                    <span>
+                                        <GenericList ListOfItems="book.Genres">
+                                            <ItemTemplate Context="genre">
+                                                <MudLink Underline="Underline.None" Style="font-size:25px" Href="@Pager.GetHref("/genres/", genre.Id)" Color="MudBlazor.Color.Secondary">@genre.Name &nbsp;</MudLink>
+                                            </ItemTemplate>
+                                        </GenericList>
+                                    </span>
+                                </h2>
+                            </div>
+                            <div class="col-sm-12 mt-lg-5">
+                                <h2 class="h3"><b>Publication date:</b> 8 June 1949 </h2>
+                            </div>
+                            <div class="col-sm-12 mt-lg-5">
+                                <h2 class="h3 mt-2"><b>Pages:</b> 328 </h2>
+                            </div>
+                            <div class="col-sm-12 text-center mt-lg-5">
+                                <MudFab Style="width:70%" Icon="@Icons.Material.Filled.Favorite" Color="MudBlazor.Color.Secondary" Label="Add to library" />
+                            </div>
+                            <div class="col-sm-12 text-center mt-lg-5">
+                                <MudItem>
+                                    <MudRating SelectedValue="@Convert.ToInt32(bookRating)" Size="MudBlazor.Size.Large" ReadOnly="true" />
+                                </MudItem>
+                                <h5>(@bookRating - @book.Ratings.Count() voters)</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 bg-white sp-col">
+                    <MudTabs Elevation="4" Rounded="true" Centered="true">
+                        <MudTabPanel Style="font-size:20px" Text="Description">
+                            <div class="col-sm-12" style="min-height:400px">
+                                <h2 class="h3 mb-lg-3 mt-lg-3" style="font-family: 'Poppins' , sans-serif;"><b>About book:</b></h2>
+                                <MudItem xs="12" sm="12" md="12">
+                                    <MudTextField ReadOnly="true" Style="font-size:20px" T="string" Variant="Variant.Outlined" Text="@book.MainDescription" Lines="10" />
+                                </MudItem>
+                                <div class="col-sm-12 text-center">
+                                    <h2 class="h3 mb-lg-3 mt-lg-5" style="font-family: 'Poppins' , sans-serif;"><b>Wanna rate this book? </b></h2>
+                                    <MudItem>
+                                        <MudRating Size="MudBlazor.Size.Large" />
+                                    </MudItem>
+                                </div>
+                            </div>
+                        </MudTabPanel>
+                        <MudTabPanel Style="font-size:20px" Text="Comments">
+                            <div class="col-sm-12" style="min-height:400px">
+                                <h2 class="h3 mb-lg-3 mt-lg-3" style="font-family: 'Poppins' , sans-serif;"><b>Post comment here</b></h2>
+                                <MudItem Class="row">
+                                    <MudItem Class="col-sm-11">
+                                        <MudTextField T="string" Lines="2" Variant="Variant.Outlined" Style="font-size:20px" />
+                                    </MudItem>
+                                    <MudItem Class="col-1 mt-2">
+                                        <MudFab Color="MudBlazor.Color.Transparent" Icon="@Icons.Material.Filled.Send" IconColor="MudBlazor.Color.Primary" />
+                                    </MudItem>
+                                </MudItem>
+                                <div class="col-sm-12 mt-lg-5 pa-4">
+                                    <MudCard Class="mud-elevation-4 mb-3">
+                                        <MudCardHeader>
+                                            <CardHeaderAvatar>
+                                                <MudAvatar Color="MudBlazor.Color.Secondary">I</MudAvatar>
+                                            </CardHeaderAvatar>
+                                            <CardHeaderContent>
+                                                <MudText Typo="Typo.body1">Dima Sisoy</MudText>
+                                            </CardHeaderContent>
+                                        </MudCardHeader>
+                                        <MudCardContent>
+                                            <MudText Typo="Typo.body2">ThThTThis photo was taken in a small village in Istra Croatia.his photo was taken in a small village in Istra Croatia.is photo was taken in a small village in Istra Croatia.This photo was taken in a small village in Istra Croatia.This photo was taken in a small village in Istra Croatia.is photo was taken in a small village in Istra Croatia.</MudText>
+                                        </MudCardContent>
+                                        <MudCardActions>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="MudBlazor.Color.Default" />
+                                            <MudText>11</MudText>
+                                        </MudCardActions>
+                                    </MudCard>
+                                </div>
+                            </div>
+                        </MudTabPanel>
+                    </MudTabs>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .mud-icon-size-large {
+        font-size: 4.25rem;
+    }
+</style>
 
 @code {
-    [Parameter]
-    public Guid Id { get; set; }
+    [Parameter] public Guid Id { get; set; }
+    private Book book;
+    private double bookRating;
 
+    protected async override Task OnInitializedAsync()
+    {
+        await GetBook();
+        bookRating = BookRepo.GetBookRatingsAverage(book);
+    }
 
-
-
+    private async Task GetBook()
+    {
+        book = await BookRepo.GetById(Id);
+        if (book == null) NavigationManager.NavigateTo("notfound");
+    }
 }

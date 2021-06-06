@@ -1,16 +1,39 @@
 ﻿@page "/genres"
 
-@using WebApplication9.Data
+@using WebApplication9.Data.Models;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Pages.Genres_Components;
+
+@inject IGenreRepository GenreRepo
+
+@attribute [Authorize]
 
 
 <h1 class="h1">Genres</h1>
 <div class="image main">
-    <img src="https://demo.phpjabbers.com/free-web-templates/book-online-store-website-template-86/images/banner-image-6-1920x500.jpg" class="img-fluid" alt="">
+    <img src="https://demo.phpjabbers.com/free-web-templates/book-online-store-website-template-86/images/banner-image-6-1920x500.jpg" class="imageHeader" alt="">
 </div>
+<br>
 
-
-
+<FilterGenericItems Items="@findedgenres" TItem="Genre" SearchItems="@GetGenreBySearchValue">
+    <Item Context="genre">
+        <GenreItem Genre="genre" />
+    </Item>
+</FilterGenericItems>
 
 @code {
+    private IEnumerable<Genre> genres = new List<Genre>();
+    private IEnumerable<Genre> findedgenres = new List<Genre>();
+    protected async override Task OnInitializedAsync()
+    {
+        genres = await GenreRepo.GetAll();
+        findedgenres = await GenreRepo.GetAll();
+    }
 
+    private IEnumerable<Genre> GetGenreBySearchValue(string searchValue)
+    {
+        if (string.IsNullOrEmpty(searchValue)) return genres;
+        else return genres.Where(i => i.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+        || i.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase));
+    }
 }

@@ -43,6 +43,11 @@ namespace WebApplication9.Data.Repositories
             return await Context.Set<T>().ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllNoTracking()
+        {
+            return await Context.Set<T>().AsNoTracking().ToListAsync();
+        }
+
         public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
         {
             return await Context.Set<T>().Where(predicate).ToListAsync();

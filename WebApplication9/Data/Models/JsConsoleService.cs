@@ -15,5 +15,10 @@ namespace WebApplication9.Data.Models
         {
             await this.JsRuntime.InvokeVoidAsync("console.log", message);
         }
+
+        public async Task Test()
+        {
+            await JsRuntime.InvokeAsync<string>("changeLanguage", "ru");
+        }
     }
 }

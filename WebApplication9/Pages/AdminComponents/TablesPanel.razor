@@ -1,0 +1,25 @@
+﻿@page "/admin/tablepanel"
+
+@using WebApplication9.Pages.AdminComponents;
+
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager;
+@inject ISnackbar Snackbar;
+
+<h1 class="h1">Tables</h1>
+<MudBlazor.MudTabs Elevation="17" Rounded="true" Centered="true" Color="@MudBlazor.Color.Primary">
+    <MudTabPanel Icon="@MudBlazor.Icons.Filled.MenuBook" Text="Books">
+        <BookTable />
+    </MudTabPanel>
+    <MudTabPanel Icon="@MudBlazor.Icons.Filled.DriveFileRenameOutline" Text="Authors">
+        <AuthorTable />
+    </MudTabPanel>
+    <MudTabPanel Icon="@MudBlazor.Icons.Filled.LocalLibrary" Text="Genres">
+        <GenreTable />
+    </MudTabPanel>
+</MudBlazor.MudTabs>
+
+@code {
+
+}

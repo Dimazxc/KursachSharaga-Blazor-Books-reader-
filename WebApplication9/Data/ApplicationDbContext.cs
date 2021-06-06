@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using WebApplication9.Data.Models;
 
 namespace WebApplication9.Data
@@ -28,6 +29,7 @@ namespace WebApplication9.Data
         {
             optionsBuilder
                 .UseLazyLoadingProxies()
+                .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning))
                 .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-WebApplication9-AE458A3D-F164-4E80-AA3B-2EE9DCED4A1A;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
     }

@@ -1,23 +1,15 @@
-
 using Blazorise;
 using Blazorise.Bootstrap;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebApplication9.Areas.Identity;
 using WebApplication9.Data;
 using WebApplication9.Data.Models;
@@ -47,6 +39,7 @@ namespace WebApplication9
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddMudServices(config =>
             {
@@ -59,6 +52,8 @@ namespace WebApplication9
 
             services.AddBlazorise(o => o.ChangeTextOnKeyPress = true).AddBootstrapProviders();
             services.AddTransient<JsConsoleService>();
+            services.AddTransient<PageHrefService>(); 
+            services.AddTransient<UserService>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             
             services.AddScoped<IBookRepository, BookRepository>();

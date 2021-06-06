@@ -1,0 +1,241 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using Microsoft.EntityFrameworkCore;
+
+@inject ISnackbar Snackbar;
+@inject IBookRepository BookRepo;
+@inject IAuthorRepository AuthorRepo;
+@inject IGenreRepository GenreRepo;
+
+<GenericTable @ref="Table" Items="books" TItem="Book" @bind-selectedItem="selectedBook" GetItems="OnInitializedAsync" SearchItem="SearchBooks"
+              AddOrEditItem="AddOrEditBook" DeleteItem="DeleteBook">
+    <TableToolbar>
+        <MudText Typo="Typo.h4">Avaible books: </MudText>
+        <MudToolBarSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+    </TableToolbar>
+    <TableHeader>
+        <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<Book, object>(x => x.Title)"><MudText Typo="Typo.h6">Title</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Image Url</MudText></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">PDF Url</MudText></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Book, object>(x => x.SmallDescription)"><MudText Typo="Typo.h6">Sm. Description</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Book, object>(x => x.MainDescription)"><MudText Typo="Typo.h6">M. Description</MudText></MudTableSortLabel></MudTh>
+    </TableHeader>
+    <TableRows>
+        <MudTd DataLabel="Title">@context.Title</MudTd>
+        <MudTd DataLabel="Image Url">@context.ImageUrl</MudTd>
+        <MudTd DataLabel="PDF Url">@context.PdfUrl</MudTd>
+        <MudTd Style="font-size:12px;" DataLabel="Sm. Description">@context.SmallDescription</MudTd>
+        <MudTd Style="font-size:12px;" DataLabel="M. Description">@context.MainDescription</MudTd>
+        <MudTd><MudButton Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="(() => ChangeShowId(context.Id))">Show Details</MudButton></MudTd>
+    </TableRows>
+    <WorkDialogContent>
+        <MudTextField @bind-Value="@selectedBook.Title" Label="Title" />
+        <MudTextField @bind-Value="@selectedBook.ImageUrl" Label="Image Url" />
+        <MudTextField @bind-Value="@selectedBook.PdfUrl" Label="PDF Url" />
+        <MudTextField @bind-Value="@selectedBook.SmallDescription" Lines="3" Variant="MudBlazor.Variant.Outlined" Label="Sm. Description" />
+        <MudTextField @bind-Value="@selectedBook.MainDescription" Variant="MudBlazor.Variant.Outlined" Lines="5" Label="M. Description" />
+    </WorkDialogContent>
+    <DeleteDialogContent>
+        <MudText>Do you really want to delete this book?</MudText>
+        <MudTextField @bind-Value="@selectedBook.Title" Label="Title" ReadOnly="true" />
+    </DeleteDialogContent>
+    <TableChildContent>
+        @if (IdShow == context.Id)
+        {
+            <MudTr>
+                <td colspan="4">
+                    <MudCard Elevation="0">
+                        <MudCardContent Class="pa-0">
+                            <MudTable Items="@context.Authors" Context="authorContext" Hover="false" Breakpoint="MudBlazor.Breakpoint.Sm" Elevation="0">
+                                <ToolBarContent>
+                                    <MudItem xs="12" sm="6" md="4">
+                                        <MudAutocomplete T="string" Label="Authors Names" @bind-Value="selectedAuthorName"
+                                                         CoerceText="false" MaxItems="100" SearchFunc="SearchAuthors" />
+                                    </MudItem>
+                                    &nbsp;&nbsp;
+                                    <MudFab Color="MudBlazor.Color.Primary" Icon="@Icons.Material.Filled.Add" Size="MudBlazor.Size.Small" OnClick="AddAuthor" />
+                                </ToolBarContent>
+                                <ColGroup>
+                                    <col style="width: 100px;" />
+                                    <col style="width: 100px;" />
+                                </ColGroup>
+                                <HeaderContent>
+                                    <MudTh>
+                                        <MudText Style="font-size:20px;" Typo="Typo.h6">Author name</MudText>
+                                    </MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Name">@authorContext.FullName</MudTd>
+                                    <MudFab Size="MudBlazor.Size.Small" Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Delete" OnClick="(() => DeleteAuthor(authorContext.FullName))" />
+                                </RowTemplate>
+                            </MudTable>
+                        </MudCardContent>
+                    </MudCard>
+                </td>
+            </MudTr>
+            <MudTr>
+                <td colspan="4">
+                    <MudCard Elevation="0">
+                        <MudCardContent Class="pa-0">
+                            <MudTable Items="@context.Genres" Context="genreContext" Hover="false" Breakpoint="MudBlazor.Breakpoint.Sm" Elevation="0">
+                                <ToolBarContent>
+                                    <MudItem xs="12" sm="6" md="4">
+                                        <MudAutocomplete T="string" Label="Genres Names" @bind-Value="selectedGenreName"
+                                                         CoerceText="false" MaxItems="100" SearchFunc="SearchGenres" />
+                                    </MudItem>
+                                    &nbsp;&nbsp;
+                                    <MudFab Color="MudBlazor.Color.Primary" Icon="@Icons.Material.Filled.Add" Size="MudBlazor.Size.Small" OnClick="AddGenre" />
+                                </ToolBarContent>
+                                <ColGroup>
+                                    <col style="width: 100px;" />
+                                    <col style="width: 100px;" />
+                                </ColGroup>
+                                <HeaderContent>
+                                    <MudTh>
+                                        <MudText Style="font-size:20px;" Typo="Typo.h6">Genre name</MudText>
+                                    </MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Name">@genreContext.Name</MudTd>
+                                    <MudFab Size="MudBlazor.Size.Small" Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Delete" OnClick="(() => DeleteGenre(genreContext.Name))" />
+                                </RowTemplate>
+                            </MudTable>
+                        </MudCardContent>
+                    </MudCard>
+                </td>
+            </MudTr>
+        }
+    </TableChildContent>
+</GenericTable>
+
+@code {
+    private IEnumerable<Book> books = new List<Book>();
+
+    private string searchString = "";
+    private string selectedAuthorName = "";
+    private string selectedGenreName = "";
+    private Book selectedBook = new Book();
+    private Guid IdShow = Guid.Empty;
+    private GenericTable<Book> Table;
+
+    protected async override Task OnInitializedAsync()
+    {
+        books = await BookRepo.GetAll();
+    }
+
+    private bool SearchBooks(Book book)
+    {
+        return (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString)
+            || book.Title.Contains(searchString) || book.MainDescription.Contains(searchString)
+            || book.SmallDescription.Contains(searchString));
+    }
+
+    private async Task<IEnumerable<string>> SearchAuthors(string searchableValue)
+    {
+        if (string.IsNullOrEmpty(searchableValue))
+        {
+            selectedAuthorName = "";
+            return await AuthorRepo.GetByName();
+        }
+        var resultAuthors = await AuthorRepo.GetWhere(author => author.FullName.Contains(searchableValue));
+        return resultAuthors.Select(i => i.FullName);
+    }
+
+    private async Task<IEnumerable<string>> SearchGenres(string searchableValue)
+    {
+        if (string.IsNullOrEmpty(searchableValue))
+        {
+            selectedGenreName = "";
+            return await GenreRepo.GetByName();
+        }
+        var resultGenres = await GenreRepo.GetWhere(genre => genre.Name.Contains(searchableValue));
+        return resultGenres.Select(i => i.Name);
+    }
+
+    private async void AddOrEditBook()
+    {
+        if (selectedBook.Id == Guid.Empty)
+        {
+            selectedBook.Id = Guid.NewGuid();
+            await BookRepo.Add(selectedBook);
+        }
+        else
+        {
+            await BookRepo.Update(selectedBook);
+        }
+        Snackbar.Add("Successfully saved: " + selectedBook.Title, Severity.Success);
+        Table.CloseModal();
+    }
+
+    private async void DeleteBook()
+    {
+        await BookRepo.Remove(selectedBook);
+        Snackbar.Add("Successfully deleted: " + selectedBook.Title, Severity.Error);
+        Table.CloseModal();
+    }
+
+    private void ChangeShowId(Guid id)
+    {
+        if (IdShow != id)
+        {
+            IdShow = id;
+        }
+        else IdShow = Guid.Empty;
+    }
+
+    private async void AddGenre()
+    {
+        if (!string.IsNullOrEmpty(selectedGenreName))
+        {
+            var book = await BookRepo.GetById(IdShow);
+            var genre = await GenreRepo.FirstOrDefault(i => i.Name == selectedGenreName);
+            if (book.Genres.Contains(genre)) await ClearSearchField("This genre already exist!", Severity.Warning);
+            else
+            {
+                await BookRepo.AddGenre(book, genre);
+                await ClearSearchField("Genre successfully added", Severity.Success);
+            }
+        }
+    }
+
+    private async void DeleteGenre(string genreName)
+    {
+        var book = await BookRepo.GetById(IdShow);
+        var genre = await GenreRepo.FirstOrDefault(i => i.Name == genreName);
+        await BookRepo.RemoveGenre(book, genre);
+        await ClearSearchField("Genre successfully deleted", Severity.Error);
+    }
+
+    private async void AddAuthor()
+    {
+        if (!string.IsNullOrEmpty(selectedAuthorName))
+        {
+            var book = await BookRepo.GetById(IdShow);
+            var author = await AuthorRepo.FirstOrDefault(i => i.FullName == selectedAuthorName);
+            if (book.Authors.Contains(author)) await ClearSearchField("This author already exist!", Severity.Warning);
+            else
+            {
+                await BookRepo.AddAuthor(book, author);
+                await ClearSearchField("Author successfully added", Severity.Success);
+            }
+        }
+    }
+
+    private async void DeleteAuthor(string authorName)
+    {
+        var book = await BookRepo.GetById(IdShow);
+        var author = await AuthorRepo.FirstOrDefault(i => i.FullName == authorName);
+        await BookRepo.RemoveAuthor(book, author);
+        await ClearSearchField("Author successfully deleted", Severity.Error);
+    }
+
+    private async Task ClearSearchField(string message, Severity severity)
+    {
+        Snackbar.Add(message, severity);
+        selectedAuthorName = "";
+        selectedGenreName = "";
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+}

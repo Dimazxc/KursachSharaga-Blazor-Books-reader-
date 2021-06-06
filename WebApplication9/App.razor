@@ -1,8 +1,11 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
+﻿@using WebApplication9.Pages.Helper_Components;
+
+
+<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
             <NotAuthorized>
-                <p>Hey! You're not allowed in here.</p>
+                <LoginRedirect />
             </NotAuthorized>
             <Authorizing>
                 <p>Just checking with the boss you can come in.</p>
@@ -12,7 +15,7 @@
     <NotFound>
         <CascadingAuthenticationState>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p>Sorry, there's nothing at this address.</p>
+                <WebApplication9.Pages.Helper_Components.NotFoundPage />
             </LayoutView>
         </CascadingAuthenticationState>
     </NotFound>

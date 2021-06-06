@@ -1,0 +1,72 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+
+@inject ISnackbar Snackbar;
+@inject IGenreRepository GenreRepo;
+
+<GenericTable @ref="Table" Items="genres" TItem="Genre" @bind-selectedItem="selectedGenre" GetItems="OnInitializedAsync" SearchItem="SearchGenre"
+    AddOrEditItem="AddOrEditGenre" DeleteItem="DeleteGenre">
+    <TableToolbar>
+        <MudText Typo="Typo.h4">Avaible genres: </MudText>
+        <MudToolBarSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+    </TableToolbar>
+    <TableHeader>
+        <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<Genre, object>(x => x.Name)"><MudText Typo="Typo.h6">Name</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Genre, object>(x => x.ImageUrl)"><MudText Typo="Typo.h6">Image Url</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Genre, object>(x => x.Description)"><MudText Typo="Typo.h6">Description</MudText></MudTableSortLabel></MudTh>
+    </TableHeader>
+    <TableRows>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Image Url">@context.ImageUrl</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+    </TableRows>
+    <WorkDialogContent>
+        <MudTextField @bind-Value="@selectedGenre.Name" Label="Name" />
+        <MudTextField @bind-Value="@selectedGenre.ImageUrl" Label="Image Url" />
+        <MudTextField @bind-Value="@selectedGenre.Description" Lines="5" Variant="MudBlazor.Variant.Outlined" Label="Description" />
+    </WorkDialogContent>
+    <DeleteDialogContent>
+        <MudText>Do you really want to delete this genre?</MudText>
+        <MudTextField @bind-Value="@selectedGenre.Name" Label="Name" ReadOnly="true" />
+    </DeleteDialogContent>
+</GenericTable>
+
+@code {
+    private IEnumerable<Genre> genres = new List<Genre>();
+    private Genre selectedGenre = new Genre();
+    private string searchString = "";
+    private GenericTable<Genre> Table;
+
+    protected async override Task OnInitializedAsync()
+    {
+        genres = await GenreRepo.GetAll();
+    }
+
+    private bool SearchGenre(Genre genre)
+    {
+        return (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString) || genre.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase) || genre.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private async void AddOrEditGenre()
+    {
+        if (selectedGenre.Id == Guid.Empty)
+        {
+            selectedGenre.Id = Guid.NewGuid();
+            await GenreRepo.Add(selectedGenre);
+        }
+        else
+        {
+            await GenreRepo.Update(selectedGenre);
+        }
+        Snackbar.Add("Successfully saved: " + selectedGenre.Name, Severity.Success);
+        Table.CloseModal();
+    }
+
+    private async void DeleteGenre()
+    {
+        await GenreRepo.Remove(selectedGenre);
+        Snackbar.Add("Successfully delete: " + selectedGenre.Name, Severity.Error);
+        Table.CloseModal();
+    }
+}

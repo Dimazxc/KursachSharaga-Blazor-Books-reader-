@@ -1,0 +1,77 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+
+@inject ISnackbar Snackbar;
+@inject IAuthorRepository AuthorRepo;
+
+<GenericTable @ref="Table" Items="authors" TItem="Author" @bind-selectedItem="selectedAuthors" GetItems="OnInitializedAsync" SearchItem="SearchAuthors"
+              AddOrEditItem="AddOrEditAuthor" DeleteItem="DeleteAuthor">
+    <TableToolbar>
+        <MudText Typo="Typo.h4">Avaible genres: </MudText>
+        <MudToolBarSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+    </TableToolbar>
+    <TableHeader>
+        <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<Genre, object>(x => x.Name)"><MudText Typo="Typo.h6">Name</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Genre, object>(x => x.ImageUrl)"><MudText Typo="Typo.h6">Image Url</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Genre, object>(x => x.Description)"><MudText Typo="Typo.h6">Description</MudText></MudTableSortLabel></MudTh>
+    </TableHeader>
+    <TableRows>
+        <MudTd DataLabel="Full Name">@context.FullName</MudTd>
+        <MudTd DataLabel="Image Url">@context.ImageUrl</MudTd>
+        <MudTd DataLabel="Sm. Description">@context.SmallDescription</MudTd>
+        <MudTd DataLabel="M. Description">@context.MainDescription</MudTd>
+    </TableRows>
+    <WorkDialogContent>
+        <MudTextField @bind-Value="@selectedAuthors.FullName" Label="Full Name" />
+        <MudTextField @bind-Value="@selectedAuthors.ImageUrl" Label="Image Url" />
+        <MudTextField @bind-Value="@selectedAuthors.SmallDescription" Lines="3" Variant="MudBlazor.Variant.Outlined" Label="Sm. Description" />
+        <MudTextField @bind-Value="@selectedAuthors.MainDescription" Variant="MudBlazor.Variant.Outlined" Lines="5" Label="M. Description" />
+    </WorkDialogContent>
+    <DeleteDialogContent>
+        <MudText>Do you really want to delete this author?</MudText>
+        <MudTextField @bind-Value="@selectedAuthors.FullName" Label="Full Name" ReadOnly="true" />
+    </DeleteDialogContent>
+</GenericTable>
+
+@code {
+    private IEnumerable<Author> authors = new List<Author>();
+    private string searchString = "";
+    private Author selectedAuthors = new Author();
+    private GenericTable<Author> Table;
+
+    protected async override Task OnInitializedAsync()
+    {
+        authors = await AuthorRepo.GetAll();
+    }
+
+    private bool SearchAuthors(Author author)
+    {
+        return (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString) ||
+            author.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+            author.MainDescription.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+            author.SmallDescription.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private async void AddOrEditAuthor()
+    {
+        if (selectedAuthors.Id == Guid.Empty)
+        {
+            selectedAuthors.Id = Guid.NewGuid();
+            await AuthorRepo.Add(selectedAuthors);
+        }
+        else
+        {
+            await AuthorRepo.Update(selectedAuthors);
+        }
+        Snackbar.Add("Successfully saved: " + selectedAuthors.FullName, Severity.Success);
+        Table.CloseModal();
+    }
+
+    private async void DeleteAuthor()
+    {
+        await AuthorRepo.Remove(selectedAuthors);
+        Snackbar.Add("Successfully deleted: " + selectedAuthors.FullName, Severity.Error);
+        Table.CloseModal();
+    }
+}

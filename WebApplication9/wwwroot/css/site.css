@@ -1,6 +1,6 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,700,900");
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -212,7 +212,7 @@ app {
 .specifies {
     position: absolute;
     width: 100%;
-    bottom: -160px;
+    bottom: -260px;
     background: #fff;
     padding: 10px;
     box-sizing: border-box;
@@ -287,8 +287,17 @@ label {
         -ms-transition: -ms-transform 0.5s ease, opacity 0.5s ease;
         transition: transform 0.5s ease, opacity 0.5s ease;
         position: relative;
-        width: 350px;
+        width: 250px;
         margin: 2.5em 0 0 2.5em;
+    }
+
+    .tiles .genreItem {
+        width: 350px;
+    }
+
+    .tiles .bookItem {
+        width: 320px;
+        height: 450px;
     }
 
         .tiles article > .image {
@@ -527,6 +536,12 @@ body.is-touch .tiles article .content {
     letter-spacing: -0.035em;
 }
 
+.h3 {
+    font-size: 30px;
+    line-height: 0.7;
+    margin-left: 4px;
+}
+
 .image.main {
     display: block;
     margin: 0 0 3em 0;
@@ -535,8 +550,35 @@ body.is-touch .tiles article .content {
 
 .authortheme {
     visibility: hidden;
+    font-size:1px;
 }
 
-.tiles article:hover  .authortheme {
+.tiles article:hover .authortheme {
     visibility: visible;
+    font-size: 16px;
+}
+
+.img-fluid {
+    width: 330px;
+    height: auto;
+}
+
+.bg-author {
+    background: url("https://i.ibb.co/60v1ygM/imageedit-2-9639499356.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.sp-col {
+    box-sizing: border-box;
+    border: 10px solid transparent;
+    background-clip: padding-box;
+    border-radius: 18px;
+}
+
+.imageHeader {
+    width: 100%;
+    height: 100%;
 }

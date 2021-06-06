@@ -1,0 +1,83 @@
+﻿@typeparam TItem
+@using System;
+
+<br>
+<MudTable Items="@Items" Context="context" Hover="true" Striped="true" Filter="new Func<TItem, bool>(SearchItem)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
+    <ToolBarContent>
+        @TableToolbar
+        <MudFab Color="MudBlazor.Color.Primary" Icon="@Icons.Material.Filled.Add" @onclick="OpenModalAdd" />
+    </ToolBarContent>
+    <HeaderContent>
+        @TableHeader
+    </HeaderContent>
+    <RowTemplate>
+        @TableRows(context)
+        <MudFab Color="MudBlazor.Color.Tertiary" Icon="@Icons.Material.Filled.Edit" @onclick="(() => OpenModalParam(WorkModal, context))" />
+        <MudFab Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Delete" @onclick="(() => OpenModalParam(DeleteModal, context))" />
+    </RowTemplate>
+    <ChildRowContent>
+         @if(TableChildContent!=null)  @TableChildContent(context)
+    </ChildRowContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<TableModal DialogHeader="Add/Update" Close="CloseModal" @ref="WorkModal">
+    <DialogContent>
+        @WorkDialogContent
+    </DialogContent>
+    <SubmitBtnRender>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.DoneOutline" Color="MudBlazor.Color.Success" OnClick="(() => AddOrEditItem.InvokeAsync())">Save</MudButton>
+    </SubmitBtnRender>
+</TableModal>
+
+<TableModal DialogHeader="Delete" Close="CloseModal" @ref="DeleteModal">
+    <DialogContent>
+        @DeleteDialogContent
+    </DialogContent>
+    <SubmitBtnRender>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="MudBlazor.Color.Error" OnClick="(() => DeleteItem.InvokeAsync())">Delete</MudButton>
+    </SubmitBtnRender>
+</TableModal>
+
+@code {
+    [Parameter] public IEnumerable<TItem> Items { get; set; }
+
+    [Parameter] public EventCallback GetItems { get; set; }
+    [Parameter] public EventCallback AddOrEditItem { get; set; }
+    [Parameter] public EventCallback DeleteItem { get; set; }
+    [Parameter] public EventCallback<TItem> SelectedItemChanged { get; set; }
+
+    [Parameter] public Func<TItem, bool> SearchItem { get; set; }
+    [Parameter] public TItem selectedItem { get; set; }
+
+    [Parameter] public RenderFragment TableHeader { get; set; }
+    [Parameter] public RenderFragment TableToolbar { get; set; }
+    [Parameter] public RenderFragment<TItem> TableRows { get; set; }
+    [Parameter] public RenderFragment WorkDialogContent { get; set; }
+    [Parameter] public RenderFragment DeleteDialogContent { get; set; }
+    [Parameter] public RenderFragment<TItem> TableChildContent { get; set; }
+
+    private TableModal WorkModal;
+    private TableModal DeleteModal;
+
+    private async void OpenModalParam(TableModal Modal, TItem item)
+    {
+        selectedItem = item;
+        await SelectedItemChanged.InvokeAsync(selectedItem);
+        Modal.Show();
+    }
+
+    private void OpenModalAdd() => WorkModal.Show();
+
+    public async void CloseModal()
+    {
+        selectedItem = (TItem)Activator.CreateInstance(typeof(TItem)); ;
+        WorkModal.Cancel();
+        DeleteModal.Cancel();
+        await SelectedItemChanged.InvokeAsync(selectedItem);
+        await GetItems.InvokeAsync();
+        StateHasChanged();
+    }
+}

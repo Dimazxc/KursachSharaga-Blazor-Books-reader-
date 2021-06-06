@@ -1,10 +1,11 @@
 ﻿@using WebApplication9.Data.Models;
+@inject PageHrefService Pager;
 
-<article class="@style">
+<article class="@style genreItem">
     <span class="image">
         <img class="tileimg" src="@Genre.ImageUrl" alt="">
     </span>
-    <a href="#" class="text-left">
+    <a href="@Pager.GetHref(hrefGenre, Genre.Id)" class="text-left">
         <h2>@Genre.Name</h2>
     </a>
 </article>
@@ -12,6 +13,6 @@
 @code {
     [Parameter]
     public Genre Genre { get; set; }
-
     private string style = "style" + new Random().Next(1, 7);
+    private string hrefGenre = "/genres/";
 }

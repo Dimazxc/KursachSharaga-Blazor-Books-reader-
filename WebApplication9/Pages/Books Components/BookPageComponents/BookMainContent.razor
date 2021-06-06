@@ -1,0 +1,35 @@
+﻿<div class="col-sm-8 bg-white sp-col">
+    <div class="container">
+        <div class="row" style="font-family: 'Poppins', sans-serif;">
+            @*<div class="col-sm-12 text-center">
+                <h2 class="h1">@book.Title</h2>
+            </div>*@
+            <div class="col-sm-12 mt-lg-5">
+                @BookAuthorsData
+            </div>
+            <div class="col-sm-12 mt-lg-3">
+                @BookGenresData
+            </div>
+            <div class="col-sm-12 mt-lg-5">
+                <h2 class="h3"><b>Publication date:</b> 8 June 1949 </h2>
+            </div>
+            <div class="col-sm-12 mt-lg-5">
+                <h2 class="h3 mt-2"><b>Pages:</b> 328 </h2>
+            </div>
+            <div class="col-sm-12 text-center mt-lg-5">
+                <MudFab Style="width:70%" Icon="@Icons.Material.Filled.Favorite" Color="MudBlazor.Color.Secondary" Label="Add to library" />
+            </div>
+            @*<div class="col-sm-12 text-center mt-lg-5">
+                <MudItem>
+                    <MudRating SelectedValue="@Convert.ToInt32(bookRating)" Size="MudBlazor.Size.Large" ReadOnly="true" />
+                </MudItem>
+                <h5>(@bookRating - @book.Ratings.Count() voters)</h5>
+            </div>*@
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter] public RenderFragment BookAuthorsData { get; set; }
+    [Parameter] public RenderFragment BookGenresData { get; set; }
+
+}

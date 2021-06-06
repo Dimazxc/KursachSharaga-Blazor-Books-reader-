@@ -9,10 +9,11 @@
 @inject IBookRepository BookRepo;
 @inject IAuthorRepository AuthorRepo;
 @inject IGenreRepository GenreRepo;
-@inject NavigationManager NavigationManager;
 @inject ISnackbar Snackbar;
+@inject UserService UserService;
+@inject JsConsoleService JsConsoleService;
 
-<MudButton Color="MudBlazor.Color.Success" @onclick="@(() => Snackbar.Add("CHECK SNACKBAR!!!!", Severity.Success))">AAAAAAAA</MudButton>
+@attribute [Authorize]
 
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
@@ -46,6 +47,7 @@
 
 <header id="inner">
     <h1 class="h1">Find your new book!</h1>
+    <MudButton Color="MudBlazor.Color.Error" OnClick="Test">ABOBA</MudButton>
 </header>
 
 <br>
@@ -74,7 +76,12 @@
 
 @if (books != null)
 {
-    <DataList HeaderMessage="The most rated books" HrefMessage="books">
+    <DataList>
+        <Header>
+            <div class="container">
+                <h2 class="h2">The most rated books</h2>
+            </div>
+        </Header>
         <MainContent>
             <GenericList ListOfItems="books">
                 <ItemTemplate Context="book">
@@ -82,6 +89,9 @@
                 </ItemTemplate>
             </GenericList>
         </MainContent>
+        <Footer>
+            <div class="text-center mt-4 container"><MudLink Style="font-size:16px" Color="MudBlazor.Color.Primary" Href="/books">MORE BOOKS &nbsp;<i class="oi oi-arrow-right"></i></MudLink></div>
+        </Footer>
     </DataList>
 }
 
@@ -90,7 +100,12 @@
 
 @if (authors != null)
 {
-    <DataList HeaderMessage="The most popular authors" HrefMessage="authors">
+    <DataList>
+        <Header>
+            <div class="container">
+                <h2 class="h2">The most popular authors</h2>
+            </div>
+        </Header>
         <MainContent>
             <GenericList ListOfItems="authors">
                 <ItemTemplate Context="author">
@@ -98,6 +113,9 @@
                 </ItemTemplate>
             </GenericList>
         </MainContent>
+        <Footer>
+            <div class="text-center mt-4 container"><MudLink Style="font-size:16px" Color="MudBlazor.Color.Secondary" Href="/authors">MORE AUTHORS &nbsp;<i class="oi oi-arrow-right"></i></MudLink></div>
+        </Footer>
     </DataList>
 }
 
@@ -106,7 +124,12 @@
 
 @if (genres != null)
 {
-    <DataList HeaderMessage="The most popular genres" HrefMessage="genres">
+    <DataList>
+        <Header>
+            <div class="container">
+                <h2 class="h2">The most popular genres</h2>
+            </div>
+        </Header>
         <MainContent>
             <GenericList ListOfItems="genres">
                 <ItemTemplate Context="genre">
@@ -114,6 +137,9 @@
                 </ItemTemplate>
             </GenericList>
         </MainContent>
+        <Footer>
+            <div class="text-center mt-4 container"><MudLink Style="font-size:16px" Color="MudBlazor.Color.Success" Href="/genres">MORE GENRES &nbsp;<i class="oi oi-arrow-right"></i></MudLink></div>
+        </Footer>
     </DataList>
 }
 
@@ -124,17 +150,20 @@
     private IEnumerable<Book> books;
     private IEnumerable<Author> authors;
     private IEnumerable<Genre> genres;
+    private IdentityUser curruentUser;
+
 
     protected async override Task OnInitializedAsync()
     {
         books = await BookRepo.GetAll();
         authors = await AuthorRepo.GetAll();
         genres = await GenreRepo.GetAll();
+        curruentUser = await UserService.GetUser();
     }
 
-    public void ReadMore(Guid id, string href)
+    private async Task Test()
     {
-        NavigationManager.NavigateTo("/" + href + "/" + id);
+        await JsConsoleService.Test();
     }
 }
 

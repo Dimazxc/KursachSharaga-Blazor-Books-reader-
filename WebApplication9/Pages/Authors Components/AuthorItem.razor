@@ -1,18 +1,24 @@
 ﻿@using WebApplication9.Data.Models;
+@inject PageHrefService Pager;
 
-<article class="@style">
-    <span class="image">
-        <img class="tileimg" src="@Author.ImageUrl" alt="">
-    </span>
-    <a href="#" class="text-left">
-        <h2>@Author.FullName</h2>
-        <h5 class="authortheme">@Author.SmallDescription</h5>
-    </a>
-</article>
+<MudItem>
+    <article class="@style mt-4 mb-4">
+        <span class="image">
+            <img class="tileimg" src="@Author.ImageUrl" alt="">
+        </span>
+        <a href="@Pager.GetHref(hrefAuthor, Author.Id)" class="text-left">
+            <h2>@Author.FullName</h2>
+            <br>
+            <div class="authortheme text-center">
+                <h6 class="authortheme">@Author.SmallDescription</h6>
+            </div>
+        </a>
+    </article>
+</MudItem>
 
 @code {
     [Parameter]
     public Author Author { get; set; }
-
     private string style = "style" + new Random().Next(1, 7);
+    private string hrefAuthor = "/authors/";
 }

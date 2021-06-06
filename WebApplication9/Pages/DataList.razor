@@ -1,21 +1,22 @@
 ﻿@using WebApplication9.Data.Models;
 
-<div class="container" style="font-family:'Times New Roman', Times, serif">
-    <div class="row">
-        <h2 class="h2">@HeaderMessage</h2>
-        @MainContent
-    </div>
-    <br>
-    <div class="text-center"><MudLink Style="font-size:16px" Color="MudBlazor.Color.Secondary" Href="@HrefMessage">MORE @HrefMessage.ToUpper() &nbsp;<i class="oi oi-arrow-right"></i></MudLink></div>
-</div>
+<MudGrid Justify="MudBlazor.Justify.Center">
+    <MudItem xs="11">
+        @Header
+        <MudGrid Spacing="4" Justify="MudBlazor.Justify.Center" Class="tiles">
+            @MainContent
+        </MudGrid>
+    </MudItem>
+    @Footer
+</MudGrid>
 
 @code {
-    [Parameter] 
+    [Parameter]
     public RenderFragment MainContent { get; set; }
 
     [Parameter]
-    public string HeaderMessage { get; set; }
+    public RenderFragment Header { get; set; }
 
     [Parameter]
-    public string HrefMessage { get; set; }
+    public RenderFragment Footer { get; set; }
 }

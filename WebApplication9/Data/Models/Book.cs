@@ -26,6 +26,9 @@ namespace WebApplication9.Data.Models
         [Required]
         public string PdfUrl { get; set; }
 
+        [Required]
+        public string BackgroundImage { get; set; }
+
         public virtual List<Author> Authors { get; set; } = new List<Author>();
 
         public virtual List<Genre> Genres { get; set; } = new List<Genre>();

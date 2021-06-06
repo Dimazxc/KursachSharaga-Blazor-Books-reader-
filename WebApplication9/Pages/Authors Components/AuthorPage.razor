@@ -7,6 +7,7 @@
 @inject NavigationManager NavigationManager;
 
 
+@attribute [Authorize]
 
 <h2>Authors page by id: @Id</h2>
 
@@ -24,7 +25,6 @@
     private async Task GetAuthor()
     {
         author = await AuthorRepo.GetById(Id);
-
         if (author == null) NavigationManager.NavigateTo("notfound");
     }
 }

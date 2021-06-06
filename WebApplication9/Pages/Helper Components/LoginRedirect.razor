@@ -1,0 +1,14 @@
+﻿@inject NavigationManager UriHelper
+
+@code {
+    private string loginPath = $"/Identity/Account/Login";
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            UriHelper.NavigateTo(loginPath, true);
+        }
+        catch {}
+    }
+} 

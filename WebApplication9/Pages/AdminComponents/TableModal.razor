@@ -1,0 +1,29 @@
+﻿
+<MudDialog @bind-IsVisible="displayModal">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Size="MudBlazor.Size.Large" Color="MudBlazor.Color.Primary" Icon="@Icons.Material.Filled.Beenhere" Class="mr-3 mb-n1" /> @DialogHeader
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @DialogContent
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">Cancel</MudButton>
+        @SubmitBtnRender
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [Parameter] public RenderFragment DialogContent { get; set; }
+    [Parameter] public RenderFragment SubmitBtnRender { get; set; }
+    [Parameter] public string DialogHeader { get; set; }
+    [Parameter] public Action Close { get; set; }
+
+    private bool displayModal;
+
+    public void Show() => displayModal = true;
+
+    public void Cancel() => displayModal = false;
+}

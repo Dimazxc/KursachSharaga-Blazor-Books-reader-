@@ -16,6 +16,9 @@ namespace WebApplication9.Data.Repositories
         Task Remove(T entity);
 
         Task<IEnumerable<T>> GetAll();
+
+        Task<IEnumerable<T>> GetAllNoTracking();
+
         Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate);
 
         Task<int> CountAll();
