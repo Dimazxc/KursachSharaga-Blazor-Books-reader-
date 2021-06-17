@@ -1,0 +1,28 @@
+﻿@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Data.Models;
+
+@inject IUserLibraryRepository UserLibRepo;
+@inject PageHrefService Pager;
+@inject ISnackbar Snackbar;
+
+<div class="text-center">
+    <MudFab Color="MudBlazor.Color.Tertiary" Icon="@Icons.Material.Filled.QuestionAnswer" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read more" Class="ma-2" Link="@Pager.GetHref(hrefBook, Book.Id)" />
+    <MudFab Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Add" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="To library" Class="ma-2"></MudFab>
+</div>
+
+@code {
+    [Parameter] public Book Book { get; set; }
+    [CascadingParameter(Name = "CurUser")] public IdentityUser User { get; set; }
+    private string hrefBook = "/books/";
+
+    private async Task AddBookToLibrary()
+    {
+        var library = await UserLibRepo.FirstOrDefault(i => i.UserId == User.Id);
+        if (library.Books.Contains(Book)) Snackbar.Add("You already have this book in ur library.", Severity.Error);
+        else
+        {
+            Snackbar.Add("Book successfully added to ur library. Check it now!", Severity.Error);
+            await UserLibRepo.AddBookToLib(library, Book);
+        }
+    }
+}

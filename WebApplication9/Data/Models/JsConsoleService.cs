@@ -18,7 +18,7 @@ namespace WebApplication9.Data.Models
 
         public async Task Test()
         {
-            await JsRuntime.InvokeAsync<string>("changeLanguage", "ru");
+            await JsRuntime.InvokeAsync<string>("changeLanguage", "en");
         }
     }
 }

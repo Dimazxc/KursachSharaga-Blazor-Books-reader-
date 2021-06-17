@@ -19,6 +19,8 @@ namespace WebApplication9.Data
 
         public DbSet<CommentRating> CommentRatings { get; set; }
 
+        public DbSet<UserLibrary> UserLibraries { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

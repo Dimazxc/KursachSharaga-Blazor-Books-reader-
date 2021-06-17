@@ -1,0 +1,46 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Pages.AdminComponents;
+
+<MudCard Class="mud-elevation-4 col-8 text-center mb-5 mt-5 ml-5 mt-5">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.body1"><h2 class="h3 mt-2">@Book.Title</h2></MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@Icons.Material.Filled.Close" Color="MudBlazor.Color.Default" />
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardMedia Image="@Book.ImageUrl" Height="250" Style="width:70%;margin-left:auto;margin-right:auto" />
+    <MudCardContent>
+        <MudText Typo="Typo.body2">@Book.SmallDescription</MudText>
+    </MudCardContent>
+    <MudCardActions Class="col-12 text-center">
+        <MudFab Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Book" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read now" Class="ma-2" OnClick="OpenModal"></MudFab>
+        <MudFab Color="MudBlazor.Color.Success" Icon="@Icons.Material.Filled.MusicNote" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Listen now" Class="ma-2"></MudFab>
+    </MudCardActions>
+</MudCard>
+
+<Modal @ref="modalRef" >
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <ModalHeader>
+            <ModalTitle>@Book.Title</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <iframe  src="https://epub.ub.uni-muenchen.de/5359/1/5359.pdf#page=4" style="width:100%; height:700px;" frameborder="0"></iframe>
+        </ModalBody>
+        <ModalFooter>
+            <MudButton OnClick="ClosePdfModal">Cancel</MudButton>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public Book Book { get; set; }
+
+    private Modal modalRef;
+
+    private void OpenModal() => modalRef.Show();
+
+    private void ClosePdfModal() => modalRef.Hide();
+}

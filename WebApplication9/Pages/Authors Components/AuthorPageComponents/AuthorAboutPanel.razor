@@ -1,0 +1,12 @@
+﻿@using WebApplication9.Data.Models;
+
+<h2 class="h3 mb-lg-3 mt-lg-3" style="font-family: 'Poppins' , sans-serif;"><b>About author:</b></h2>
+<MudItem xs="12" sm="12" md="12">
+    <MudTextField ReadOnly="true" Style="font-size:20px" T="string" Variant="Variant.Outlined" Text="@(Author.SmallDescription + "\n" + Author.MainDescription)" Lines="12" />
+</MudItem>
+<div class="col-sm-12 text-center mt-5 mb-5">
+    <MudLink Underline="Underline.None" target="blank" Style="font-size:25px" Href="@Author.BiographyUrl" Color="MudBlazor.Color.Secondary">@("Read more about " + Author.FullName) &nbsp;&nbsp;<i class="oi oi-arrow-right"></i></MudLink>
+</div>
+@code {
+    [Parameter] public Author Author { get; set; }
+}

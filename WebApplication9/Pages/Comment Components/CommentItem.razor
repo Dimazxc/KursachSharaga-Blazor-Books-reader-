@@ -3,22 +3,22 @@
 <MudCard Class="mud-elevation-4 mb-3">
     <MudCardHeader>
         <CardHeaderAvatar>
-            <MudAvatar Color="MudBlazor.Color.Secondary">@comment.UserName[0]</MudAvatar>
+            <MudAvatar Color="MudBlazor.Color.Secondary">@Comment.UserName[0]</MudAvatar>
         </CardHeaderAvatar>
         <CardHeaderContent>
-            <MudText Typo="Typo.body1">@comment.UserName</MudText>
+            <MudText Typo="Typo.body1">@Comment.UserName</MudText>
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudText Typo="Typo.body2">@comment.Content</MudText>
+        <MudText Typo="Typo.body2">@Comment.Content</MudText>
     </MudCardContent>
     <MudCardActions>
         <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="MudBlazor.Color.Default" />
-        <MudText>@comment.CommentRatings.Count()</MudText>
+        <MudText>@Comment.CommentRatings.Count()</MudText>
     </MudCardActions>
 </MudCard>
 
 
 @code {
-    [Parameter] public Comment comment { get; set; }
+    [Parameter] public Comment Comment { get; set; }
 }

@@ -1,0 +1,9 @@
+﻿@using WebApplication9.Data.Models;
+
+<div class="col-lg-6 bg-white sp-col" style="float:none;margin:auto;font-family: 'Poppins', sans-serif;">
+    <h2 class="h3 text-center mt-4 mb-4"><b>@Author.FullName</b></h2>
+    <h2 class="h3 text-center mt-4 mb-4" style="font-size: 20px"><b>@Author.YearsOfLife</b></h2>
+</div>
+@code {
+    [Parameter] public Author Author { get; set; }
+}

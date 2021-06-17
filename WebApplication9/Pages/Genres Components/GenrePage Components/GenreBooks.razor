@@ -1,0 +1,17 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Pages.Books_Components;
+
+<h2 class="h3 mb-lg-4 mt-lg-4" style="font-family: 'Poppins' , sans-serif;"><b>Genres books:</b></h2>
+<DataList>
+    <MainContent>
+        <GenericList ListOfItems="@Genre.Books">
+            <ItemTemplate Context="book">
+                <BookItem Book="book" />
+            </ItemTemplate>
+        </GenericList>
+    </MainContent>
+</DataList>
+
+@code{
+    [Parameter] public Genre Genre { get; set; }
+}

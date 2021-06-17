@@ -16,23 +16,32 @@
     </TableToolbar>
     <TableHeader>
         <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<Book, object>(x => x.Title)"><MudText Typo="Typo.h6">Title</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Publication date</MudText></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Pages</MudText></MudTh>
         <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Image Url</MudText></MudTh>
         <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">PDF Url</MudText></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Bg Image Url</MudText></MudTh>
         <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Book, object>(x => x.SmallDescription)"><MudText Typo="Typo.h6">Sm. Description</MudText></MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Book, object>(x => x.MainDescription)"><MudText Typo="Typo.h6">M. Description</MudText></MudTableSortLabel></MudTh>
     </TableHeader>
     <TableRows>
         <MudTd DataLabel="Title">@context.Title</MudTd>
+        <MudTd DataLabel="Publication date">@context.PublishedDay</MudTd>
+        <MudTd DataLabel="Pages">@context.Pages</MudTd>
         <MudTd DataLabel="Image Url">@context.ImageUrl</MudTd>
         <MudTd DataLabel="PDF Url">@context.PdfUrl</MudTd>
+        <MudTd DataLabel="Bg Image Url">@context.BackgroundImage</MudTd>
         <MudTd Style="font-size:12px;" DataLabel="Sm. Description">@context.SmallDescription</MudTd>
         <MudTd Style="font-size:12px;" DataLabel="M. Description">@context.MainDescription</MudTd>
         <MudTd><MudButton Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="(() => ChangeShowId(context.Id))">Show Details</MudButton></MudTd>
     </TableRows>
     <WorkDialogContent>
         <MudTextField @bind-Value="@selectedBook.Title" Label="Title" />
+        <MudTextField @bind-Value="@selectedBook.PublishedDay" Label="Publication date" />
+        <MudTextField @bind-Value="@selectedBook.Pages" Label="Pages" />
         <MudTextField @bind-Value="@selectedBook.ImageUrl" Label="Image Url" />
         <MudTextField @bind-Value="@selectedBook.PdfUrl" Label="PDF Url" />
+        <MudTextField @bind-Value="@selectedBook.BackgroundImage" Label="Bg Image Url" />
         <MudTextField @bind-Value="@selectedBook.SmallDescription" Lines="3" Variant="MudBlazor.Variant.Outlined" Label="Sm. Description" />
         <MudTextField @bind-Value="@selectedBook.MainDescription" Variant="MudBlazor.Variant.Outlined" Lines="5" Label="M. Description" />
     </WorkDialogContent>

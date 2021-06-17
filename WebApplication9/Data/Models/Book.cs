@@ -29,10 +29,18 @@ namespace WebApplication9.Data.Models
         [Required]
         public string BackgroundImage { get; set; }
 
+        [Required]
+        public string PublishedDay { get; set; }
+
+        [Required]
+        public int Pages { get; set; }
+
         public virtual List<Author> Authors { get; set; } = new List<Author>();
 
         public virtual List<Genre> Genres { get; set; } = new List<Genre>();
 
         public virtual List<BookRating> Ratings { get; set; } = new List<BookRating>();
+
+        public virtual List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

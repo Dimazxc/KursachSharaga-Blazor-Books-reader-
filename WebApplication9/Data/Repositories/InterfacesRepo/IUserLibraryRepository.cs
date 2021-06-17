@@ -6,8 +6,8 @@ using WebApplication9.Data.Models;
 
 namespace WebApplication9.Data.Repositories.InterfacesRepo
 {
-    interface ICommentRepository : IAsyncRepository<Comment>
+    public interface IUserLibraryRepository : IAsyncRepository<UserLibrary>
     {
-
+        Task AddBookToLib(UserLibrary userLibrary, Book book);
     }
 }

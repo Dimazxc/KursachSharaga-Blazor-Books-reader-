@@ -12,19 +12,26 @@
         <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
     </TableToolbar>
     <TableHeader>
-        <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<Genre, object>(x => x.Name)"><MudText Typo="Typo.h6">Name</MudText></MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Genre, object>(x => x.ImageUrl)"><MudText Typo="Typo.h6">Image Url</MudText></MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Genre, object>(x => x.Description)"><MudText Typo="Typo.h6">Description</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<Author, object>(x => x.FullName)"><MudText Typo="Typo.h6">Full Name</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Image Url</MudText></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Bio Url</MudText></MudTh>
+        <MudTh><MudText Style="font-size:20px;" Typo="Typo.h6">Year of life</MudText></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Author, object>(x => x.SmallDescription)"><MudText Typo="Typo.h6">Sm. Description</MudText></MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel Style="font-size:20px;" SortBy="new Func<Author, object>(x => x.MainDescription)"><MudText Typo="Typo.h6">M. Description</MudText></MudTableSortLabel></MudTh>
     </TableHeader>
     <TableRows>
         <MudTd DataLabel="Full Name">@context.FullName</MudTd>
         <MudTd DataLabel="Image Url">@context.ImageUrl</MudTd>
+        <MudTd DataLabel="Bio Url">@context.BiographyUrl</MudTd>
+        <MudTd DataLabel="Year of life">@context.YearsOfLife</MudTd>
         <MudTd DataLabel="Sm. Description">@context.SmallDescription</MudTd>
         <MudTd DataLabel="M. Description">@context.MainDescription</MudTd>
     </TableRows>
     <WorkDialogContent>
         <MudTextField @bind-Value="@selectedAuthors.FullName" Label="Full Name" />
         <MudTextField @bind-Value="@selectedAuthors.ImageUrl" Label="Image Url" />
+        <MudTextField @bind-Value="@selectedAuthors.BiographyUrl" Label="Bio Url" />
+        <MudTextField @bind-Value="@selectedAuthors.YearsOfLife" Label="Year of life" />
         <MudTextField @bind-Value="@selectedAuthors.SmallDescription" Lines="3" Variant="MudBlazor.Variant.Outlined" Label="Sm. Description" />
         <MudTextField @bind-Value="@selectedAuthors.MainDescription" Variant="MudBlazor.Variant.Outlined" Lines="5" Label="M. Description" />
     </WorkDialogContent>

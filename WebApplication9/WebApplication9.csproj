@@ -23,4 +23,9 @@
     <PackageReference Include="MudBlazor" Version="5.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Books Components\ViewDataComponents\" />
+    <Folder Include="Pages\MyLib Components\" />
+  </ItemGroup>
+
 </Project>

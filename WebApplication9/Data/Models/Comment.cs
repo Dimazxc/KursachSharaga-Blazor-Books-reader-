@@ -19,9 +19,6 @@ namespace WebApplication9.Data.Models
         [Required]
         public string Content { get; set; }
 
-        [Required]
-        public int Likes { get; set; }
-
         public virtual List<CommentRating> CommentRatings { get; set; } = new List<CommentRating>();
         public virtual Book Book { get; set; }
     }

@@ -23,6 +23,12 @@ namespace WebApplication9.Data.Models
         [Required]
         public string ImageUrl { get; set; }
 
+        [Required]
+        public string BiographyUrl { get; set; }
+
+        [Required]
+        public string YearsOfLife { get; set; }
+
         public virtual List<Book> Books { get; set; } = new List<Book>();
     }
 }

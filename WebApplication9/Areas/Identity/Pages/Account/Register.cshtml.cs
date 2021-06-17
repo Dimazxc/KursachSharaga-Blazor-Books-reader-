@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using WebApplication9.Data.Models;
+using WebApplication9.Data.Repositories.InterfacesRepo;
 
 namespace WebApplication9.Areas.Identity.Pages.Account
 {
@@ -23,17 +25,19 @@ namespace WebApplication9.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUserLibraryRepository _userLibraryRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IUserLibraryRepository userLibraryRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _userLibraryRepository = userLibraryRepository;
         }
 
         [BindProperty]
@@ -79,6 +83,7 @@ namespace WebApplication9.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    await _userLibraryRepository.Add(new UserLibrary() { Id = Guid.NewGuid(), UserId = user.Id});
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

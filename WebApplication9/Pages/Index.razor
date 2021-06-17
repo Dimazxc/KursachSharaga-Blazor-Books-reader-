@@ -10,8 +10,6 @@
 @inject IAuthorRepository AuthorRepo;
 @inject IGenreRepository GenreRepo;
 @inject ISnackbar Snackbar;
-@inject UserService UserService;
-@inject JsConsoleService JsConsoleService;
 
 @attribute [Authorize]
 
@@ -47,7 +45,6 @@
 
 <header id="inner">
     <h1 class="h1">Find your new book!</h1>
-    <MudButton Color="MudBlazor.Color.Error" OnClick="Test">ABOBA</MudButton>
 </header>
 
 <br>
@@ -150,20 +147,13 @@
     private IEnumerable<Book> books;
     private IEnumerable<Author> authors;
     private IEnumerable<Genre> genres;
-    private IdentityUser curruentUser;
-
+    [CascadingParameter(Name ="CurUser")] public IdentityUser User { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         books = await BookRepo.GetAll();
         authors = await AuthorRepo.GetAll();
         genres = await GenreRepo.GetAll();
-        curruentUser = await UserService.GetUser();
-    }
-
-    private async Task Test()
-    {
-        await JsConsoleService.Test();
     }
 }
 

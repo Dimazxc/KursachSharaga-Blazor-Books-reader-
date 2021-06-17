@@ -1,0 +1,16 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Pages.Books_Components;
+
+<h2 class="h3 mb-lg-3 mt-lg-3" style="font-family: 'Poppins' , sans-serif;"><b>Authors books:</b></h2>
+<DataList>
+    <MainContent>
+        <GenericList ListOfItems="@Author.Books">
+            <ItemTemplate Context="book">
+                <BookItem Book="book" />
+            </ItemTemplate>
+        </GenericList>
+    </MainContent>
+</DataList>
+@code {
+    [Parameter] public Author Author { get; set; }
+}

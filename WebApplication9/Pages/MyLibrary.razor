@@ -1,3 +1,31 @@
 ﻿@page "/mylib"
-
+@using WebApplication9.Data.Models;
+@using WebApplication9.Pages.Books_Components;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
 @attribute [Authorize]
+
+@inject IBookRepository BookRepo;
+
+<div class="content bg-author" style="background-image: url('https://i.ibb.co/smT3dvH/imageedit-5-5210224827.jpg'); ">
+
+    @if (books != null)
+    {
+        <div class="row d-flex justify-content-center align-items-center">
+            <GenericList ListOfItems="books">
+                <ItemTemplate Context="book">
+                    <LibraryBookItem Book="book" />
+                </ItemTemplate>
+            </GenericList>
+        </div>
+    }
+
+</div>
+
+@code {
+    private IEnumerable<Book> books;
+
+    protected async override Task OnInitializedAsync()
+    {
+        books = await BookRepo.GetAll();
+    }
+}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication9.Data.Repositories
 {
-    interface IAsyncRepository<T> where T : class
+    public interface IAsyncRepository<T> where T : class
     {
         ValueTask<T> GetById(object id);
         Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);

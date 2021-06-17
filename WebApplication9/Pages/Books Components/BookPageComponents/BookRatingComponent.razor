@@ -1,0 +1,49 @@
+﻿@using WebApplication9.Pages.Books_Components.BookPageComponents;
+@using WebApplication9.Pages.Comment_Components;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+@using WebApplication9.Data.Models;
+
+@inject IBookRepository BookRepo;
+@inject IBookRatingRepository BookRatingRepo;
+
+<h2 class="h3 mb-lg-3 mt-lg-3" style="font-family: 'Poppins' , sans-serif;"><b>About book:</b></h2>
+<MudItem xs="12" sm="12" md="12">
+    <MudTextField ReadOnly="true" Style="font-size:20px" T="string" Variant="Variant.Outlined" Text="@Book.MainDescription" Lines="10" />
+</MudItem>
+<div class="col-sm-12 text-center">
+    <h2 class="h3 mb-lg-3 mt-lg-5" style="font-family: 'Poppins' , sans-serif;"><b>Wanna rate this book? </b></h2>
+    <MudItem>
+        <MudRating SelectedValue="@GetUserRating()" SelectedValueChanged="((e) => AddOrUpdateBookRating(e))" Size="MudBlazor.Size.Large" />
+    </MudItem>
+</div>
+
+@code{
+    [Parameter] public Book Book { get; set; }
+    [Parameter] public IdentityUser User { get; set; }
+    [Parameter] public EventCallback RefreshComponent { get; set; }
+
+    private async Task AddOrUpdateBookRating(int selectedRate)
+    {
+        var curRating = GetUserBookRating();
+        if (curRating == null)
+        {
+            curRating = new BookRating() { Book = Book, UserId = User.Id, Value = selectedRate };
+            await BookRatingRepo.Add(curRating);
+        }
+        else
+        {
+            curRating.Value = selectedRate;
+            await BookRatingRepo.Update(curRating);
+        }
+        await RefreshComponent.InvokeAsync();
+    }
+
+    private int GetUserRating()
+    {
+        var rating = GetUserBookRating();
+        return rating == null ? 0 : rating.Value;
+    }
+
+    private BookRating GetUserBookRating() => Book.Ratings.FirstOrDefault(i => i.UserId == User.Id);
+
+}

@@ -1,0 +1,10 @@
+﻿@using WebApplication9.Data.Models; 
+
+<h2 class="h3 mb-lg-3 mt-lg-3" style="font-family: 'Poppins' , sans-serif;"><b>About genre:</b></h2>
+<MudItem xs="12" sm="12" md="12">
+    <MudTextField ReadOnly="true" Style="font-size:20px" T="string" Variant="Variant.Outlined" Text="@Genre.Description" Lines="12" />
+</MudItem>
+
+@code{
+    [Parameter] public Genre Genre { get; set; }
+}

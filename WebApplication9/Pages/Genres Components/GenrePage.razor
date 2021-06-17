@@ -1,14 +1,36 @@
 ﻿@page "/genres/{Id:guid}"
 @using WebApplication9.Data.Repositories.InterfacesRepo;
 @using WebApplication9.Data.Models;
+@using WebApplication9.Pages.Books_Components;
+@using WebApplication9.Pages.Genres_Components.GenrePage_Components;
 
 @inject IGenreRepository GenreRepo;
 @inject NavigationManager NavigationManager;
 
 @if (genre != null)
 {
-    <h2>Genres page by id: @genre.Name</h2>
-
+    <div class="content bg-author" style="background-image: url('https://i.ibb.co/smT3dvH/imageedit-5-5210224827.jpg'); ">
+        <div class="container">
+            <div class="row">
+                <GenreImage GenreImageUrl="@genre.ImageUrl" />
+                <GenreInfoPanel Genre="@genre" />
+                <div class="col-sm-12 bg-white sp-col">
+                    <MudTabs Elevation="4" Rounded="true" Centered="true">
+                        <MudTabPanel Style="font-size:20px" Text="Description">
+                            <div class="col-sm-12" style="min-height:400px">
+                                <GenreAboutPanel Genre="@genre" />
+                            </div>
+                        </MudTabPanel>
+                        <MudTabPanel Style="font-size:20px" Text="Books">
+                            <div class="col-sm-12" style="min-height:400px">
+                                <GenreBooks Genre="@genre" />
+                            </div>
+                        </MudTabPanel>
+                    </MudTabs>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @code {

@@ -49,11 +49,10 @@ namespace WebApplication9
                 config.SnackbarConfiguration.ShowTransitionDuration = 500;
             });
 
-
             services.AddBlazorise(o => o.ChangeTextOnKeyPress = true).AddBootstrapProviders();
             services.AddTransient<JsConsoleService>();
             services.AddTransient<PageHrefService>(); 
-            services.AddTransient<UserService>();
+            services.AddScoped<UserService>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             
             services.AddScoped<IBookRepository, BookRepository>();
@@ -64,6 +63,8 @@ namespace WebApplication9
             
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICommentRatingRepository, CommentRatingRepository>();
+
+            services.AddScoped<IUserLibraryRepository, UserLibraryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

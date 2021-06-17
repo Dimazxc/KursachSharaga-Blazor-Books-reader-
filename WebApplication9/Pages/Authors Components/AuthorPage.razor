@@ -2,6 +2,8 @@
 
 @using WebApplication9.Data.Repositories.InterfacesRepo;
 @using WebApplication9.Data.Models;
+@using WebApplication9.Pages.Books_Components;
+@using WebApplication9.Pages.Authors_Components.AuthorPageComponents;
 
 @inject IAuthorRepository AuthorRepo;
 @inject NavigationManager NavigationManager;
@@ -9,12 +11,35 @@
 
 @attribute [Authorize]
 
-<h2>Authors page by id: @Id</h2>
+@if (author != null)
+{
+    <div class="content bg-author" style="background-image: url('https://i.ibb.co/smT3dvH/imageedit-5-5210224827.jpg'); ">
+        <div class="container">
+            <div class="row">
+                <AuthorImage AuthorImageUrl="@author.ImageUrl" />
+                <AuthorInfoPanel Author="@author" />
+                <div class="col-sm-12 bg-white sp-col">
+                    <MudTabs Elevation="4" Rounded="true" Centered="true">
+                        <MudTabPanel Style="font-size:20px" Text="Description">
+                            <div class="col-sm-12" style="min-height:400px">
+                                <AuthorAboutPanel Author="@author" />
+                            </div>
+                        </MudTabPanel>
+                        <MudTabPanel Style="font-size:20px" Text="Books">
+                            <div class="col-sm-12" style="min-height:400px">
+                                <AuthorBooks Author="@author" />
+                            </div>
+                        </MudTabPanel>
+                    </MudTabs>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
     public Guid Id { get; set; }
-
     private Author author;
 
     protected async override Task OnInitializedAsync()

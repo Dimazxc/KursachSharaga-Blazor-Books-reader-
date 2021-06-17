@@ -1,5 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using WebApplication9.Data.Models;
 
+@inherits LayoutComponentBase
+@inject UserService UserService;
 <div class="sidebar">
     <NavMenu />
 </div>
@@ -10,12 +12,25 @@
     </div>
 
     <div class="content px-4">
-        @Body
+        @if (user != null)
+        {
+        <CascadingValue Name="CurUser" Value="user">
+            @Body
+        </CascadingValue>
+        }
     </div>
 </div>
 <MudThemeProvider />
-<MudDialogProvider 
-  FullWidth="true"
-  CloseButton="false"  
-  DisableBackdropClick="true"/>
+<MudDialogProvider FullWidth="true"
+                   CloseButton="false"
+                   DisableBackdropClick="true" />
 <MudSnackbarProvider />
+
+@code{
+    private IdentityUser user;
+
+    protected async override Task OnInitializedAsync()
+    {
+        user = await UserService.GetUser();
+    }
+}

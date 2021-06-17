@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication9.Data;
 
 namespace WebApplication9.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210614161235_Some fields changes (list comments & remove Likes)")]
+    partial class SomefieldschangeslistcommentsremoveLikes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,12 +323,7 @@ namespace WebApplication9.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserLibraryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserLibraryId");
 
                     b.ToTable("Book");
                 });
@@ -424,21 +421,6 @@ namespace WebApplication9.Data.Migrations
                     b.ToTable("Genre");
                 });
 
-            modelBuilder.Entity("WebApplication9.Data.Models.UserLibrary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserLibrary");
-                });
-
             modelBuilder.Entity("AuthorBook", b =>
                 {
                     b.HasOne("WebApplication9.Data.Models.Author", null)
@@ -520,13 +502,6 @@ namespace WebApplication9.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApplication9.Data.Models.Book", b =>
-                {
-                    b.HasOne("WebApplication9.Data.Models.UserLibrary", null)
-                        .WithMany("Books")
-                        .HasForeignKey("UserLibraryId");
-                });
-
             modelBuilder.Entity("WebApplication9.Data.Models.BookRating", b =>
                 {
                     b.HasOne("WebApplication9.Data.Models.Book", "Book")
@@ -564,11 +539,6 @@ namespace WebApplication9.Data.Migrations
             modelBuilder.Entity("WebApplication9.Data.Models.Comment", b =>
                 {
                     b.Navigation("CommentRatings");
-                });
-
-            modelBuilder.Entity("WebApplication9.Data.Models.UserLibrary", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }
