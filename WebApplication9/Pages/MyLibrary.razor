@@ -1,31 +1,59 @@
 ﻿@page "/mylib"
 @using WebApplication9.Data.Models;
 @using WebApplication9.Pages.Books_Components;
+@using WebApplication9.Pages.Filter_Page;
 @using WebApplication9.Data.Repositories.InterfacesRepo;
 @attribute [Authorize]
 
 @inject IBookRepository BookRepo;
+@inject IUserLibraryRepository UserLibRepo;
 
-<div class="content bg-author" style="background-image: url('https://i.ibb.co/smT3dvH/imageedit-5-5210224827.jpg'); ">
-
-    @if (books != null)
+<div class="content">
+    <div class="image main">
+        <img src="https://demo.phpjabbers.com/free-web-templates/book-online-store-website-template-86/images/banner-image-6-1920x500.jpg" class="imageHeader" alt="">
+    </div>
+    @if (userLibrary != null)
     {
-        <div class="row d-flex justify-content-center align-items-center">
-            <GenericList ListOfItems="books">
-                <ItemTemplate Context="book">
-                    <LibraryBookItem Book="book" />
-                </ItemTemplate>
-            </GenericList>
+        <div class="">
+            <FilterGenericItems Items="@userBooksWithProgress" TItem="ReadProgress" SearchItems="@GetBookBySearchValue">
+                <Item Context="bookProgress">
+                    <CascadingValue TValue="Action<ReadProgress>" Name="DeleteBookEvent" Value="DeleteBookFromLib">
+                        <LibraryBookItem BookProgress="bookProgress" />
+                    </CascadingValue>
+                </Item>
+            </FilterGenericItems>
         </div>
+    }
+    else
+    {
+        <MudProgressCircular Color="MudBlazor.Color.Primary" Style="margin-left:50%;margin-top:50%;margin-bottom:50%;margin-right:50%;height:170px;width:170px;" Indeterminate="true" />
     }
 
 </div>
 
 @code {
-    private IEnumerable<Book> books;
+    [CascadingParameter(Name = "CurUser")] public IdentityUser User { get; set; }
+    private UserLibrary userLibrary;
+    private IEnumerable<ReadProgress> userBooksWithProgress = new List<ReadProgress>();
 
     protected async override Task OnInitializedAsync()
     {
-        books = await BookRepo.GetAll();
+        userLibrary = await UserLibRepo.FirstOrDefault(i => i.UserId == User.Id);
+        userBooksWithProgress = userLibrary.ReadProgresses;
+    }
+
+    private async void DeleteBookFromLib(ReadProgress readProgress)
+    {
+        userLibrary.ReadProgresses.Remove(readProgress);
+        await UserLibRepo.SaveChangesAsync();
+        StateHasChanged();
+    }
+
+    private IEnumerable<ReadProgress> GetBookBySearchValue(string searchValue)
+    {
+        if (string.IsNullOrEmpty(searchValue)) return userLibrary.ReadProgresses;
+        return userLibrary.ReadProgresses.Where(i => i.Book.Title.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+        || i.Book.MainDescription.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+        || i.Book.SmallDescription.Contains(searchValue, StringComparison.OrdinalIgnoreCase));
     }
 }

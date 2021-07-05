@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication9.Data;
 
 namespace WebApplication9.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210618205125_Add new relation")]
+    partial class Addnewrelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -434,31 +436,6 @@ namespace WebApplication9.Data.Migrations
                     b.ToTable("Genre");
                 });
 
-            modelBuilder.Entity("WebApplication9.Data.Models.ReadProgress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<Guid?>("BookId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("CurrentBookPage")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("UserLibraryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("UserLibraryId");
-
-                    b.ToTable("ReadProgresses");
-                });
-
             modelBuilder.Entity("WebApplication9.Data.Models.UserLibrary", b =>
                 {
                     b.Property<Guid>("Id")
@@ -597,38 +574,16 @@ namespace WebApplication9.Data.Migrations
                     b.Navigation("Comment");
                 });
 
-            modelBuilder.Entity("WebApplication9.Data.Models.ReadProgress", b =>
-                {
-                    b.HasOne("WebApplication9.Data.Models.Book", "Book")
-                        .WithMany("ReadProgresses")
-                        .HasForeignKey("BookId");
-
-                    b.HasOne("WebApplication9.Data.Models.UserLibrary", "UserLibrary")
-                        .WithMany("ReadProgresses")
-                        .HasForeignKey("UserLibraryId");
-
-                    b.Navigation("Book");
-
-                    b.Navigation("UserLibrary");
-                });
-
             modelBuilder.Entity("WebApplication9.Data.Models.Book", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("Ratings");
-
-                    b.Navigation("ReadProgresses");
                 });
 
             modelBuilder.Entity("WebApplication9.Data.Models.Comment", b =>
                 {
                     b.Navigation("CommentRatings");
-                });
-
-            modelBuilder.Entity("WebApplication9.Data.Models.UserLibrary", b =>
-                {
-                    b.Navigation("ReadProgresses");
                 });
 #pragma warning restore 612, 618
         }

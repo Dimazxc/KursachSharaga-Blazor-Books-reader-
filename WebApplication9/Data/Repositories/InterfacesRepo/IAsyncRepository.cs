@@ -23,5 +23,7 @@ namespace WebApplication9.Data.Repositories
 
         Task<int> CountAll();
         Task<int> CountWhere(Expression<Func<T, bool>> predicate);
+
+        Task SaveChangesAsync();
     }
 }

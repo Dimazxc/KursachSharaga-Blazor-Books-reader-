@@ -12,12 +12,19 @@
     </div>
 
     <div class="content px-4">
-        @if (user != null)
-        {
-        <CascadingValue Name="CurUser" Value="user">
-            @Body
-        </CascadingValue>
-        }
+        <AuthorizeView>
+            <Authorized>
+                @if (user != null)
+                {
+                    <CascadingValue Name="CurUser" Value="user">
+                        @Body
+                    </CascadingValue>
+                }
+            </Authorized>
+            <NotAuthorized>
+                <WebApplication9.Pages.Helper_Components.LoginRedirect />
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 </div>
 <MudThemeProvider />

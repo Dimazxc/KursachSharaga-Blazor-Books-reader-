@@ -57,5 +57,10 @@ namespace WebApplication9.Data.Repositories
 
         public Task<int> CountWhere(Expression<Func<T, bool>> predicate)
             => Context.Set<T>().CountAsync(predicate);
+
+        public async Task SaveChangesAsync()
+        {
+            await Context.SaveChangesAsync();
+        }
     }
 }

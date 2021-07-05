@@ -1,0 +1,34 @@
+﻿@using WebApplication9.Data.Models;
+@using WebApplication9.Pages.AdminComponents;
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+
+@inject IReadProgressRepository ReadProgressRepo;
+@inject ISnackbar Snackbar;
+
+
+<TableModal DialogHeader="Delete" Close="CloseDeleteModal" @ref="deleteModal">
+    <DialogContent>
+        <MudText>Do you really want to delete this book from ur library?</MudText>
+        <MudTextField @bind-Value="@BookProgress.Book.Title" Label="Full Name" ReadOnly="true" />
+    </DialogContent>
+    <SubmitBtnRender>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="MudBlazor.Color.Error" OnClick="SumbitDelete">Delete</MudButton>
+    </SubmitBtnRender>
+</TableModal>
+
+@code {
+    [CascadingParameter(Name = "BookWithProgress")] public ReadProgress BookProgress { get; set; }
+    [CascadingParameter(Name = "DeleteBookEvent")] public Action<ReadProgress> DeleteBookFromLibrary { get; set; }
+    private TableModal deleteModal;
+
+    public void OpenDeleteModal() => deleteModal.Show();
+
+    private void CloseDeleteModal() => deleteModal.Cancel();
+
+    private void SumbitDelete()
+    {
+        Snackbar.Add("Successfully deleted : " + BookProgress.Book.Title, Severity.Error);
+        DeleteBookFromLibrary.Invoke(BookProgress);
+        CloseDeleteModal();
+    }
+}

@@ -1,0 +1,50 @@
+﻿@using WebApplication9.Data.Models;
+@using Syncfusion.Blazor.PdfViewerServer
+@using WebApplication9.Data.Repositories.InterfacesRepo;
+
+@inject IReadProgressRepository ReadProgressRepo;
+
+<Modal @ref="modalRef" Class="b" ShowBackdrop="true">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <ModalHeader>
+            <ModalTitle>@BookProgress.Book.Title</ModalTitle>
+            <CloseButton @onclick="ClosePDFModal" />
+        </ModalHeader>
+        <ModalBody>
+            <MudFab OnClick="GoToPage" Style="width:100%" Color="MudBlazor.Color.Tertiary" Icon="@Icons.Material.Filled.QuestionAnswer" 
+                    Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="@("Continue with page" + " "+ BookProgress.CurrentBookPage)" Class="ma-2" />
+            <SfPdfViewerServer EnableNavigation="true" @ref="sfr" DocumentPath="@path" Height="750px" Width="100%" ZoomValue="100" />
+        </ModalBody>
+    </ModalContent>
+</Modal>
+
+@code {
+    [CascadingParameter(Name = "BookWithProgress")] public ReadProgress BookProgress { get; set; }
+    private Modal modalRef;
+    private SfPdfViewerServer sfr;
+    private string path = "";
+
+    public void OpenPDFModal()
+    {
+        modalRef.Show();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        System.Net.WebClient webClient = new System.Net.WebClient();
+        byte[] byteArray = await webClient.DownloadDataTaskAsync(BookProgress.Book.PdfUrl);
+        path = "data:application/pdf;base64," + Convert.ToBase64String(byteArray);
+    }
+
+    private async void ClosePDFModal()
+    {
+        modalRef.Hide();
+        BookProgress.CurrentBookPage = sfr.CurrentPageNumber;
+        await ReadProgressRepo.SaveChangesAsync();
+    }
+
+    private void GoToPage()
+    {
+        sfr.GoToPage(BookProgress.CurrentBookPage);
+    }
+}

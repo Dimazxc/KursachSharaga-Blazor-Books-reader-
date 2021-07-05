@@ -13,12 +13,11 @@
         <MudText Typo="Typo.body2">@Comment.Content</MudText>
     </MudCardContent>
     <MudCardActions>
-        <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="MudBlazor.Color.Default" />
-        <MudText>@Comment.CommentRatings.Count()</MudText>
+        <CommentRatingItem Comment="@Comment" />
     </MudCardActions>
 </MudCard>
 
 
 @code {
-    [Parameter] public Comment Comment { get; set; }
+    [Parameter] public WebApplication9.Data.Models.Comment Comment { get; set; }
 }

@@ -42,5 +42,9 @@ namespace WebApplication9.Data.Models
         public virtual List<BookRating> Ratings { get; set; } = new List<BookRating>();
 
         public virtual List<Comment> Comments { get; set; } = new List<Comment>();
+
+        public virtual List<UserLibrary> UsersLibraries { get; set; } = new List<UserLibrary>();
+
+        public virtual List<ReadProgress> ReadProgresses { get; set; } = new List<ReadProgress>();
     }
 }

@@ -16,6 +16,8 @@ using WebApplication9.Data.Models;
 using WebApplication9.Data.Repositories;
 using WebApplication9.Data.Repositories.EntityRepo;
 using WebApplication9.Data.Repositories.InterfacesRepo;
+using Syncfusion.Blazor.PdfViewerServer;
+using Syncfusion.Blazor;
 
 namespace WebApplication9
 {
@@ -39,7 +41,7 @@ namespace WebApplication9
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-
+            services.AddSyncfusionBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddMudServices(config =>
             {
@@ -57,6 +59,7 @@ namespace WebApplication9
             
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IBookRatingRepository, BookRatingRepository>();
+            services.AddScoped<IReadProgressRepository, ReadProgressRepository>();
 
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -65,6 +68,8 @@ namespace WebApplication9
             services.AddScoped<ICommentRatingRepository, CommentRatingRepository>();
 
             services.AddScoped<IUserLibraryRepository, UserLibraryRepository>();
+
+            services.AddServerSideBlazor().AddHubOptions(o => { o.MaximumReceiveMessageSize = 102400000; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

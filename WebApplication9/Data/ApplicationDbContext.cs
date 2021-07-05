@@ -21,6 +21,9 @@ namespace WebApplication9.Data
 
         public DbSet<UserLibrary> UserLibraries { get; set; }
 
+        public DbSet<ReadProgress> ReadProgresses { get; set; }
+
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

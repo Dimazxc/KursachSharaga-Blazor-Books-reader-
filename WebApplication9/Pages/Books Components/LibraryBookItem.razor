@@ -1,46 +1,39 @@
 ﻿@using WebApplication9.Data.Models;
-@using WebApplication9.Pages.AdminComponents;
+@using WebApplication9.Pages.Books_Components.LibraryBookComponents;
+
+@inject ISnackbar Snackbar;
 
 <MudCard Class="mud-elevation-4 col-8 text-center mb-5 mt-5 ml-5 mt-5">
     <MudCardHeader>
         <CardHeaderContent>
-            <MudText Typo="Typo.body1"><h2 class="h3 mt-2">@Book.Title</h2></MudText>
+            <MudText Typo="Typo.body1"><h2 class="h3 mt-2">@BookProgress.Book.Title</h2></MudText>
         </CardHeaderContent>
         <CardHeaderActions>
-            <MudIconButton Icon="@Icons.Material.Filled.Close" Color="MudBlazor.Color.Default" />
+            <MudIconButton Icon="@Icons.Material.Filled.Close" Color="MudBlazor.Color.Default" OnClick="deleteModal.OpenDeleteModal" />
         </CardHeaderActions>
     </MudCardHeader>
-    <MudCardMedia Image="@Book.ImageUrl" Height="250" Style="width:70%;margin-left:auto;margin-right:auto" />
+    <div class="mud-card-media" alt="" style="background-image: url(@BookProgress.Book.ImageUrl);height:250px;width:70%;margin-left:auto;margin-right:auto"></div>
     <MudCardContent>
-        <MudText Typo="Typo.body2">@Book.SmallDescription</MudText>
+        <MudText Typo="Typo.body2">@BookProgress.Book.SmallDescription</MudText>
+        <Blazorise.Progress>
+            <Blazorise.ProgressBar Value="(BookProgress.CurrentBookPage * 100)/ BookProgress.Book.Pages" Max="100" />
+        </Blazorise.Progress>
     </MudCardContent>
     <MudCardActions Class="col-12 text-center">
-        <MudFab Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Book" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read now" Class="ma-2" OnClick="OpenModal"></MudFab>
-        <MudFab Color="MudBlazor.Color.Success" Icon="@Icons.Material.Filled.MusicNote" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Listen now" Class="ma-2"></MudFab>
+        <MudFab data-backdrop="static" Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Book" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read now" Class="ma-2" OnClick="pdfModal.OpenPDFModal"></MudFab>
     </MudCardActions>
 </MudCard>
 
-<Modal @ref="modalRef" >
-    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
-        <ModalHeader>
-            <ModalTitle>@Book.Title</ModalTitle>
-            <CloseButton />
-        </ModalHeader>
-        <ModalBody>
-            <iframe  src="https://epub.ub.uni-muenchen.de/5359/1/5359.pdf#page=4" style="width:100%; height:700px;" frameborder="0"></iframe>
-        </ModalBody>
-        <ModalFooter>
-            <MudButton OnClick="ClosePdfModal">Cancel</MudButton>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+<CascadingValue Name="BookWithProgress" Value="BookProgress">
+
+    <BookPDFModal @ref="pdfModal" />
+    <BookDeleteModal @ref="deleteModal" />
+
+</CascadingValue>
 
 @code {
-    [Parameter] public Book Book { get; set; }
+    [Parameter] public ReadProgress BookProgress { get; set; }
+    private BookPDFModal pdfModal;
+    private BookDeleteModal deleteModal;
 
-    private Modal modalRef;
-
-    private void OpenModal() => modalRef.Show();
-
-    private void ClosePdfModal() => modalRef.Hide();
 }

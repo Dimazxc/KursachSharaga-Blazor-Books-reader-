@@ -17,5 +17,7 @@ namespace WebApplication9.Data.Models
         public string UserId { get; set; }
 
         public virtual List<Book> Books { get; set; } = new List<Book>();
+
+        public virtual List<ReadProgress> ReadProgresses { get; set; } = new List<ReadProgress>();
     }
 }

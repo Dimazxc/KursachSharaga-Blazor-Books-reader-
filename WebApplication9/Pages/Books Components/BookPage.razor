@@ -1,7 +1,7 @@
 ﻿@page "/books/{Id:guid}"
 
 @using WebApplication9.Pages.Books_Components.BookPageComponents;
-@using WebApplication9.Pages.Comment_Components; 
+@using WebApplication9.Pages.Comment_Components;
 @using WebApplication9.Data.Repositories.InterfacesRepo;
 @using WebApplication9.Data.Models;
 
@@ -57,11 +57,11 @@
                                 <h2 class="h3 mt-2"><b>Pages:</b> @book.Pages </h2>
                             </div>
                             <div class="col-sm-12 text-center mt-lg-5">
-                                <MudFab Style="width:70%" Icon="@Icons.Material.Filled.Favorite" Color="MudBlazor.Color.Secondary" Label="Add to library" />
+                                <BookItemTool Book="book" />
                             </div>
                             <div class="col-sm-12 text-center mt-lg-5">
                                 <MudItem>
-                                    <MudRating SelectedValue="@Convert.ToInt32(bookRatingValue)" Size="MudBlazor.Size.Large" ReadOnly="true" />
+                                    <MudRating SelectedValue="@Convert.ToInt32(Math.Round(bookRatingValue, 2))" Size="MudBlazor.Size.Large" ReadOnly="true" />
                                 </MudItem>
                                 <h5>(@bookRatingValue - @book.Ratings.Count() voters)</h5>
                             </div>
@@ -72,7 +72,7 @@
                     <MudTabs Elevation="4" Rounded="true" Centered="true">
                         <MudTabPanel Style="font-size:20px" Text="Description">
                             <div class="col-sm-12" style="min-height:400px">
-                                <BookRatingComponent Book="@book" User="@user" RefreshComponent="@RefreshComponents"/>
+                                <BookRatingComponent Book="@book" User="@user" RefreshComponent="@RefreshComponents" />
                             </div>
                         </MudTabPanel>
                         <MudTabPanel Style="font-size:20px" Text="Comments">
@@ -112,7 +112,7 @@
     [Parameter] public Guid Id { get; set; }
     private Book book;
     private IdentityUser user;
-    private double bookRatingValue; 
+    private double bookRatingValue;
     private string commentContent = string.Empty;
 
     protected async override Task OnInitializedAsync()
@@ -130,7 +130,7 @@
 
     private async void AddCommentToBook()
     {
-        var newComment = new Comment() { Book = book, Content = commentContent, UserName = user.UserName };
+        var newComment = new WebApplication9.Data.Models.Comment() { Book = book, Content = commentContent, UserName = user.UserName };
         await CommentRepo.Add(newComment);
         commentContent = string.Empty;
         await RefreshComponents();

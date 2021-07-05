@@ -1,0 +1,33 @@
+﻿@using WebApplication9.Data.Repositories.InterfacesRepo;
+
+
+@inject ICommentRatingRepository CommentRateRepo;
+
+<MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="CheckColor()" OnClick="SendRating" />
+<MudText>@Comment.CommentRatings.Count()</MudText>
+
+@code {
+    [CascadingParameter(Name = "CurUser")] public IdentityUser User { get; set; }
+    [Parameter] public WebApplication9.Data.Models.Comment Comment { get; set; }
+    public async void SendRating()
+    {
+        var existingRating = await CommentRateRepo.FirstOrDefault(i => i.UserId == User.Id && i.Comment == Comment);
+        if (existingRating == null)
+        {
+            var rating = new WebApplication9.Data.Models.CommentRating() { Comment = Comment, UserId = User.Id };
+            await CommentRateRepo.Add(rating);
+        }
+        else
+        {
+            await CommentRateRepo.Remove(existingRating);
+        }
+
+        StateHasChanged();
+    }
+
+    private MudBlazor.Color CheckColor()
+    {
+        if (Comment.CommentRatings.FirstOrDefault(i => i.UserId == User.Id) == null) return MudBlazor.Color.Default;
+        else return MudBlazor.Color.Secondary;
+    }
+}

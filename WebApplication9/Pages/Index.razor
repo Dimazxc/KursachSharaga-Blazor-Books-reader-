@@ -142,12 +142,11 @@
 
 <br>
 <br>
-
 @code {
     private IEnumerable<Book> books;
     private IEnumerable<Author> authors;
     private IEnumerable<Genre> genres;
-    [CascadingParameter(Name ="CurUser")] public IdentityUser User { get; set; }
+    [CascadingParameter(Name = "CurUser")] public IdentityUser User { get; set; }
 
     protected async override Task OnInitializedAsync()
     {

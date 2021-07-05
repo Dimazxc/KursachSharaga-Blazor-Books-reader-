@@ -27,12 +27,11 @@
             </span>
         </h2>
         <br>
-        <h4>@Book.SmallDescription</h4>
-        @*<div class="text-center">
-            <MudFab Color="MudBlazor.Color.Tertiary" Icon="@Icons.Material.Filled.QuestionAnswer" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read more" Class="ma-2" Link="@Pager.GetHref(hrefBook, Book.Id)" />
-            <MudFab Color="MudBlazor.Color.Secondary" Icon="@Icons.Material.Filled.Add" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="To library" Class="ma-2"></MudFab>
-        </div>*@
-        <BookItemTool Book="Book"/>
+        <h4>@Book.SmallDescription</h4>        
+        <div class="text-center">
+            <MudFab Style="width:70%" Color="MudBlazor.Color.Tertiary" Icon="@Icons.Material.Filled.QuestionAnswer" Size="MudBlazor.Size.Small" IconSize="MudBlazor.Size.Small" Label="Read more" Class="ma-2" Link="@Pager.GetHref("/books/", Book.Id)" />
+        </div>
+         <BookItemTool Book="Book" />
     </div>
 </article>
 
